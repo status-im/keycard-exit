@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Button from "../Button";
 
 type InitializationScreenProps = {
-  onPressFunc: () => void;
+  onPressFunc: (pin: string) => void;
 };
 
 const  InitializationScreen: FC<InitializationScreenProps> = props => {
@@ -13,7 +13,7 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
     <View>
       <View>
         <Text style={styles.heading}> Hello world</Text>
-        <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
+        <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => {onPressFunc("000000")}} btnJustifyContent='center'></Button>
       </View>
       <View>
     </View>

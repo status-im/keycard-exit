@@ -18,15 +18,17 @@ enum Step {
 const Main = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const didMount = useRef(false);
   const [step, setStep] = useState(Step.Discovery);
   const [pin, setPin] = useState(null || String);
+
+  const didMount = useRef(false);
+  const stepRef = useRef(step);
 
   const keycardConnectHandler = async () => {
     try {
       const appInfo = await Keycard.getApplicationInfo();
 
-      switch (step) {
+      switch (stepRef.current) {
         case Step.Discovery:
           if (appInfo["initialized?"]) {
             if (appInfo["has-master-key?"]) {
@@ -39,6 +41,7 @@ const Main = () => {
           }
           break;
         case Step.Initialization:
+          await Keycard.init(pin);
           setStep(Step.Loading);
           break;
         case Step.Loading:
@@ -59,9 +62,12 @@ const Main = () => {
       console.log(err);
     }
 
+    await Keycard.stopNFC("");
     setIsModalVisible(false);
   }
   useEffect(() => {
+    stepRef.current = step;
+
     if (!didMount.current) {
       didMount.current = true;
       DeviceEventEmitter.addListener("keyCardOnConnected", keycardConnectHandler);
@@ -87,10 +93,15 @@ const Main = () => {
     }
   }
 
+  const initPin = async (p: string) => {
+    setPin(p);
+    return connectCard();
+  }
+
   return (
     <SafeAreaView style={[backgroundStyle, styles.container]}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
-      {step == Step.Initialization && <InitializationScreen onPressFunc={connectCard}></InitializationScreen>}
+      {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} ></InitializationScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );
