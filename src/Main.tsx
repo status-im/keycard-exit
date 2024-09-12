@@ -19,10 +19,10 @@ const Main = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
-  const [pin, setPin] = useState(null || String);
 
   const didMount = useRef(false);
   const stepRef = useRef(step);
+  const pinRef = useRef("");
 
   const keycardConnectHandler = async () => {
     try {
@@ -41,7 +41,7 @@ const Main = () => {
           }
           break;
         case Step.Initialization:
-          await Keycard.init(pin);
+          await Keycard.init(pinRef.current);
           setStep(Step.Loading);
           break;
         case Step.Loading:
@@ -55,8 +55,8 @@ const Main = () => {
           break;
       }
 
-      if (pin) {
-        await Keycard.unpair(pin);
+      if (pinRef.current) {
+        await Keycard.unpair(pinRef.current);
       }
     } catch (err) {
       console.log(err);
@@ -94,7 +94,7 @@ const Main = () => {
   }
 
   const initPin = async (p: string) => {
-    setPin(p);
+    pinRef.current = p;
     return connectCard();
   }
 
