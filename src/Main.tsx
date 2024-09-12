@@ -7,6 +7,7 @@ import DiscoveryScreen from './components/steps/DiscoveryScreen';
 import Keycard from "react-native-status-keycard";
 import InitializationScreen from './components/steps/InitializationScreen';
 import NFCModal from './NFCModal';
+import MnemonicScreen from './components/steps/MnemonicScreen';
 
 enum Step {
   Discovery,
@@ -23,6 +24,7 @@ const Main = () => {
   const didMount = useRef(false);
   const stepRef = useRef(step);
   const pinRef = useRef("");
+  const mnemonicRef = useRef("");
 
   const keycardConnectHandler = async () => {
     try {
@@ -45,6 +47,7 @@ const Main = () => {
           setStep(Step.Loading);
           break;
         case Step.Loading:
+          await Keycard.saveMnemonic(mnemonicRef.current, pinRef.current);
           setStep(Step.Authentication);
           break;
         case Step.Authentication:
@@ -98,10 +101,20 @@ const Main = () => {
     return connectCard();
   }
 
+  const loadMnemonic = (mnemonic: string, p?: string) => {
+    if(p) {
+      pinRef.current = p;
+    }
+    mnemonicRef.current = mnemonic;
+
+    return connectCard();
+  }
+
   return (
     <SafeAreaView style={[backgroundStyle, styles.container]}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} ></InitializationScreen>}
+      {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true}></MnemonicScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );
