@@ -37,8 +37,8 @@ const Main = () => {
   }
 
   const addPairing = async (instanceUID, pairing) => {
-    const pairings = getPairings();
-    pairings[instanceUID] = pairing;
+    const pairings = await getPairings();
+    pairings[instanceUID] = {pairing: pairing};
     return AsyncStorage.setItem("pairings", JSON.stringify(pairings));
   } 
 
