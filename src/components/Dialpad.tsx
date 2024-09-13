@@ -7,12 +7,13 @@ import DialpadPin from "./DialpadPin";
  const { width, height } = Dimensions.get("window");
 
  type DialpadProps = {
+  prompt: string;
   onCancelFunc: () => void;
-  onNextFunc: (p?: any) => void;
+  onNextFunc: (p?: any) => boolean;
 };
 
 const Dialpad: FC<DialpadProps> = props => {
-  const {onNextFunc, onCancelFunc} = props;
+  const {prompt, onNextFunc, onCancelFunc} = props;
   const dialPadContent = [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "X"];
   const dialPadSize = width * 0.2;
   const dialPadTextSize = dialPadSize * 0.36;
@@ -20,8 +21,6 @@ const Dialpad: FC<DialpadProps> = props => {
   const pinLength = 6;
   const pinContainerSize = width / 2;
   const pinSize = pinContainerSize / pinLength;
-
-
 
   const updateCode = (item: never) => {
     if (item === "X") {
@@ -34,17 +33,23 @@ const Dialpad: FC<DialpadProps> = props => {
     }
   }
 
+  const onNext = () =>  {
+    if (!onNextFunc(code.join(''))) {
+      setCode([]);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
      <View style={styles.textContainer}>
-       <Text style={styles.pinText}>Create PIN</Text>
+       <Text style={styles.pinText}>{prompt}</Text>
        <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
        <DialpadPin pinLength={pinLength} pinSize={pinSize} code={code} dialPadContent={dialPadContent} />
        <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
      </View>
      <View style={styles.btnContainer}>
      <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={() => onNextFunc(code.join(''))} btnJustifyContent='center'></Button>
+     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onNext} btnJustifyContent='center'></Button>
      </View>
    </SafeAreaView>
   )};

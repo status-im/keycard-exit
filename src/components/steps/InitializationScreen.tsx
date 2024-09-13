@@ -20,8 +20,8 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
 
   const insertPin = (p: string) => {
     onChangePin(p);
-    console.log(p);
     setStep(PinSteps.RepeatPin);
+    return true;
   }
 
   const isSamePin = (p: string) => {
@@ -29,17 +29,18 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
   }
 
   const submitPin = (p: string) => {
-    if(isSamePin(p)) {
-      onPressFunc(pin);
-    } else {
-      console.log("err");
+    if(!isSamePin(p)) {
+      return false;
     }
+
+    onPressFunc(pin);
+    return true;
   }
 
   return (
     <View>
-      { step == PinSteps.InsertPin && <Dialpad onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
-      { step == PinSteps.RepeatPin && <Dialpad onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
+      { step == PinSteps.InsertPin && <Dialpad prompt={"Insert Pin"} onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
+      { step == PinSteps.RepeatPin && <Dialpad prompt={"Repeat Pin"} onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
     </View>
   )};
 
