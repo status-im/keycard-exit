@@ -11,7 +11,6 @@ import NFCModal from './NFCModal';
 
 //@ts-ignore
 import Keycard from "react-native-status-keycard";
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 enum Step {
   Discovery,
