@@ -27,10 +27,9 @@ const buttonStyle = StyleSheet.create({
       textAlign: 'center',
       paddingTop: 25,
       paddingBottom: 15,
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
     },
     button: {
-
     },
     title: {
       fontSize: 15,

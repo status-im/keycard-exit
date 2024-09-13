@@ -11,10 +11,11 @@ enum LoadMnemonicSteps {
 type MnemonicScreenProps = {
   pinRequired: boolean;
   onPressFunc: (mn: string, pin?: string) => void;
+  onCancelFunc: () => void;
 };
 
 const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
-  const {pinRequired, onPressFunc} = props;
+  const {pinRequired, onPressFunc, onCancelFunc} = props;
   const [mnemonic, setMnemonic] = useState('');
   const [pin, setPin] = useState('');
   const [errMessage, setErrMessage] = useState('');
@@ -49,6 +50,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         <Text style={styles.heading}> Load mnemonic</Text>
         <TextInput editable multiline numberOfLines={6} onChangeText={(val) => setMnemonic(val)} value={mnemonic} style={{backgroundColor: '#4A646C'}} />
         <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => updateMnemonic(mnemonic)} btnJustifyContent='center'></Button>
+        <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
         <Text>{errMessage}</Text>
         </View>
       }
@@ -57,6 +59,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         <Text style={styles.heading}> Insert pin</Text>
         <TextInput onChangeText={setPin} value={pin} keyboardType="number-pad" maxLength={6}/>
         <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => {onPressFunc(mnemonic, pin)}} btnJustifyContent='center'></Button>
+        <Button label="Back" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} btnJustifyContent='center'></Button>
       </View>
       }
     </View>

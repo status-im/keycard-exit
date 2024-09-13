@@ -111,12 +111,16 @@ const Main = () => {
     return connectCard();
   }
 
+  const cancel = () => {
+    setStep(Step.Discovery);
+  }
+
   return (
     <SafeAreaView style={[backgroundStyle, styles.container]}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
-      {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} ></InitializationScreen>}
-      {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true}></MnemonicScreen>}
-      {step == Step.Authentication && <AuthenticationScreen onPressFunc={() => {}}></AuthenticationScreen>}
+      {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
+      {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true} onCancelFunc={cancel}></MnemonicScreen>}
+      {step == Step.Authentication && <AuthenticationScreen onPressFunc={() => {} } onCancelFunc={cancel}></AuthenticationScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );
@@ -124,10 +128,8 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: '30%',
+    width: '100%',
     height: '100%',
-    paddingLeft: '6%',
-    paddingRight: '6%'
   },
 });
 
