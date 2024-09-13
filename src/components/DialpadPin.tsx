@@ -1,6 +1,5 @@
-import {FC } from "react";
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/Feather';
+import {FC, useEffect, useRef } from "react";
+import { StyleSheet, View, Animated } from "react-native";
 
 type DialpadPinProps = {
   pinSize: number;
@@ -11,6 +10,27 @@ type DialpadPinProps = {
 
 const  DialpadPin: FC<DialpadPinProps> = props => {
   const {dialPadContent, pinLength, code, pinSize} = props;
+  const animatedValue = useRef(new Animated.Value(0)).current;
+
+  const animatedStyle = {
+    transform: [
+      {
+        scale: animatedValue.interpolate({
+          inputRange: [0, 3],
+          outputRange: [1, 1.3],
+          extrapolate: "clamp",
+        }),
+      },
+    ],
+  };
+
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: code.length,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [code]);
 
   return (
     <View style={styles.dialPadPinContainer}>
@@ -18,8 +38,7 @@ const  DialpadPin: FC<DialpadPinProps> = props => {
        .fill(undefined)
        .map((_, index) => {
          const item = dialPadContent[index];
-         const isSelected =
-           typeof item === "number" && code[index] !== undefined;
+         const isSelected = typeof item === "number" && code[index] !== undefined;
          return (
            <View
              key={index}
@@ -40,18 +59,17 @@ const  DialpadPin: FC<DialpadPinProps> = props => {
                  styles.pinContentContainer,
                ]}
              >
-               {isSelected && (
-                 <View
-                   style={[
-                     {
-                       width: pinSize * 0.5,
-                       height: pinSize * 0.5,
-                       borderRadius: pinSize * 0.35,
-                     },
-                     styles.pinContent,
-                   ]}
-                 />
-               )}
+              {isSelected && (<Animated.View style={[
+            {
+           width: pinSize * 0.5,
+           height: pinSize * 0.5,
+           borderRadius: pinSize * 0.35,
+            },
+            animatedStyle,
+          styles.pinContent,
+      ]}
+   />
+  )}
              </View>
            </View>
          );

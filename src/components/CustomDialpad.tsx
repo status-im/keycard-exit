@@ -27,6 +27,9 @@ const CustomDialpad: FC<CustomDialpadProps> = props => {
     if (item === "X") {
       setCode((prev) => prev.slice(0, -1));
     } else {
+      if (code.length === pinLength) {
+        return;
+      }
       setCode((prev) => [...prev, item]);
     }
   }
@@ -37,11 +40,11 @@ const CustomDialpad: FC<CustomDialpadProps> = props => {
        <Text style={styles.pinText}>Create PIN</Text>
        <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
        <DialpadPin pinLength={pinLength} pinSize={pinSize} code={code} dialPadContent={dialPadContent} />
-       <DialpadKeypad dialPadContent={dialPadContent} pinLength={pinLength} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
+       <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
      </View>
      <View style={styles.btnContainer}>
      <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onNextFunc} btnJustifyContent='center'></Button>
+     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={() => onNextFunc(code.toString())} btnJustifyContent='center'></Button>
      </View>
    </SafeAreaView>
   )};

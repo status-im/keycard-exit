@@ -26,7 +26,7 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
 
   return (
     <View>
-      <CustomDialpad onCancelFunc={() => {}} onNextFunc={() => {}}></CustomDialpad>
+      <CustomDialpad onCancelFunc={() => {}} onNextFunc={(code: string | undefined) => {console.log(code)}}></CustomDialpad>
       { step == PinSteps.InsertPin &&
       <View>
       <Text style={styles.heading}> Insert pin</Text>

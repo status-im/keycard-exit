@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/Feather';
 
 type DialpadKeypadProps = {
   dialPadContent: any[];
-  pinLength: number;
   dialPadSize: number;
   dialPadTextSize: number;
   code: number[];
@@ -12,7 +11,7 @@ type DialpadKeypadProps = {
 };
 
 const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
-  const {dialPadContent, pinLength, dialPadSize, dialPadTextSize, code, updateCodeFunc} = props;
+  const {dialPadContent, dialPadSize, dialPadTextSize, code, updateCodeFunc} = props;
 
   return (
     <FlatList data={dialPadContent} numColumns={3} keyExtractor={(_, index) => index.toString()} renderItem={({ item }) => {
