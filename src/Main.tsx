@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, SafeAreaView, StyleSheet, useColorScheme, DeviceEventEmitter } from 'react-native';
+import { SafeAreaView, StyleSheet, useColorScheme, DeviceEventEmitter } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import DiscoveryScreen from './components/steps/DiscoveryScreen';
+import InitializationScreen from './components/steps/InitializationScreen';
+import MnemonicScreen from './components/steps/MnemonicScreen';
+import AuthenticationScreen from './components/steps/AuthenticationScreen';
+import NFCModal from './NFCModal';
 
 //@ts-ignore
 import Keycard from "react-native-status-keycard";
-import InitializationScreen from './components/steps/InitializationScreen';
-import NFCModal from './NFCModal';
-import MnemonicScreen from './components/steps/MnemonicScreen';
-import AuthenticationScreen from './components/steps/AuthenticationScreen';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 enum Step {
   Discovery,
@@ -26,10 +29,30 @@ const Main = () => {
   const stepRef = useRef(step);
   const pinRef = useRef("");
   const mnemonicRef = useRef("");
+  const isListeningCard = useRef(false);
+
+  const getPairings = async () => {
+    const pairingJSON = await AsyncStorage.getItem("pairings");
+    return pairingJSON ? JSON.parse(pairingJSON) : {};
+  }
+
+  const addPairing = async (instanceUID, pairing) => {
+    const pairings = getPairings();
+    pairings[instanceUID] = pairing;
+    return AsyncStorage.setItem("pairings", JSON.stringify(pairings));
+  } 
 
   const keycardConnectHandler = async () => {
+    if (!isListeningCard.current) {
+      return;
+    }
+
     try {
       const appInfo = await Keycard.getApplicationInfo();
+
+      if (appInfo["new-pairing"]) {
+        await addPairing(appInfo["instance-uid"], appInfo["new-pairing"]);
+      }
 
       switch (stepRef.current) {
         case Step.Discovery:
@@ -58,10 +81,6 @@ const Main = () => {
           setStep(Step.Discovery);
           break;
       }
-
-      if (pinRef.current) {
-        await Keycard.unpair(pinRef.current);
-      }
     } catch (err) {
       console.log(err);
     }
@@ -69,11 +88,19 @@ const Main = () => {
     await Keycard.stopNFC("");
     setIsModalVisible(false);
   }
+
   useEffect(() => {
     stepRef.current = step;
+    isListeningCard.current = isModalVisible;
 
     if (!didMount.current) {
       didMount.current = true;
+
+      const loadPairing = async () => {
+        await Keycard.setPairings(await getPairings());        
+      };
+
+      loadPairing().catch(console.log);
       DeviceEventEmitter.addListener("keyCardOnConnected", keycardConnectHandler);
       DeviceEventEmitter.addListener("keyCardOnDisconnected", () => console.log("keycard disconnected"));
       DeviceEventEmitter.addListener("keyCardOnNFCEnabled", () => console.log("nfc enabled"));
@@ -92,9 +119,7 @@ const Main = () => {
 
     await Keycard.startNFC("Tap your Keycard");
 
-    if (Platform.OS === 'android') {
-      setIsModalVisible(true);
-    }
+    setIsModalVisible(true);
   }
 
   const initPin = async (p: string) => {
@@ -103,9 +128,10 @@ const Main = () => {
   }
 
   const loadMnemonic = (mnemonic: string, p?: string) => {
-    if(p) {
+    if (p) {
       pinRef.current = p;
     }
+
     mnemonicRef.current = mnemonic;
 
     return connectCard();

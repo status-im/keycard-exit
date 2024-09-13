@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState } from "react";
-import {StyleSheet, Text, View } from "react-native";
+import {Platform, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal/dist/modal";
 
 type NFCModalProps = {
@@ -11,7 +11,7 @@ const NFCModal: FC<NFCModalProps> = props => {
   const {isVisible, onChangeFunc} = props;
 
   return (
-    <Modal isVisible={isVisible} onSwipeComplete={() => onChangeFunc(!isVisible)} swipeDirection={['up', 'left', 'right', 'down']} style={modalStyle.modalContainer}>
+    <Modal isVisible={(Platform.OS === 'android') && isVisible} onSwipeComplete={() => onChangeFunc(!isVisible)} swipeDirection={['up', 'left', 'right', 'down']} style={modalStyle.modalContainer}>
         <View style={modalStyle.container}>
           <Text style={modalStyle.header}>Ready to Scan</Text>
           <Text style={modalStyle.prompt}>Tap your Keycard</Text>
