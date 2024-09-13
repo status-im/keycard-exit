@@ -10,10 +10,12 @@ const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
   const {onPressFunc} = props;
 
   return (
-    <View>
-      <View>
+    <View style={styles.container}>
+      <View style={styles.headingContainer}>
         <Text style={styles.heading}> We are recruiting Operators to be the founders of a new, self-sovereign world in cyberspace</Text>
-        <Button label="Discover" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
+      </View>
+      <View style={styles.btnContainer}>
+      <Button label="Connect" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
       </View>
       <View>
     </View>
@@ -21,9 +23,23 @@ const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
   )};
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%'
+  },
+  headingContainer: {
+    width: '100%',
+    paddingLeft: '5.5%',
+    paddingRight: '5.5%',
+    paddingTop: '50%',
+  },
   heading: {
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 18,
+    fontFamily: 'Inconsolata Regular'
+  },
+  btnContainer: {
+    paddingTop: '7%'
   }
 });
 

@@ -6,17 +6,20 @@ type ButtonProps = {
   disabled: boolean;
   btnColor: string;
   btnWidth: string;
+  btnFontSize?: number;
+  btnBorderColor?: string;
+  btnBorderWidth?: number;
   btnJustifyContent: string;
   onChangeFunc: () => void;
 };
 
 const  Button: FC<ButtonProps> = props => {
-  const {label, disabled, btnColor, btnWidth, btnJustifyContent, onChangeFunc} = props;
+  const {label, disabled, btnColor, btnWidth, btnJustifyContent, btnFontSize, btnBorderWidth, btnBorderColor, onChangeFunc} = props;
 
   return (
     <View style={[buttonStyle.textBtnContainer, {width: btnWidth as DimensionValue, justifyContent: btnJustifyContent as any}]}>
       <TouchableOpacity key={label} disabled={disabled} style={buttonStyle.button} onPress={onChangeFunc}>
-        <Text style={[buttonStyle.title, {color: btnColor}]}>{label}</Text>
+        <Text style={[buttonStyle.title, {color: btnColor, borderBottomColor: btnBorderColor || 'none', borderBottomWidth: btnBorderWidth || 0, fontSize: btnFontSize}]}>{label}</Text>
       </TouchableOpacity>
     </View>
   )};
@@ -32,9 +35,8 @@ const buttonStyle = StyleSheet.create({
     button: {
     },
     title: {
-      fontSize: 15,
       textTransform: 'uppercase',
-
+      fontFamily: 'Inconsolata Medium',
     },
   });
 

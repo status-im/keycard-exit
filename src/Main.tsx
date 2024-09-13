@@ -123,7 +123,7 @@ const Main = () => {
       didMount.current = true;
 
       const loadPairing = async () => {
-        await Keycard.setPairings(await getPairings());        
+        await Keycard.setPairings(await getPairings());
       };
 
       loadPairing().catch(console.log);
@@ -181,7 +181,7 @@ const Main = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
 });
 

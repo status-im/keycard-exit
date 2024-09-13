@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Inconsolata Condensed Medium.ttf",
+      "sha1": "352263ace35c1aefd0cdc387e32189351cbbc112"
+    },
+    {
+      "path": "src/assets/fonts/Inconsolata Medium.ttf",
+      "sha1": "f72a59ce0107983a5fff171d27da81e8c128c8b2"
+    },
+    {
+      "path": "src/assets/fonts/Inconsolata Regular.ttf",
+      "sha1": "55181a8eafc09ca273f978d6e35d2ed46e47e570"
+    }
+  ]
+}
