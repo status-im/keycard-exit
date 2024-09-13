@@ -8,16 +8,16 @@ type DialpadKeypadProps = {
   dialPadSize: number;
   dialPadTextSize: number;
   code: number[];
-  setCode: (item: never) => void;
+  updateCodeFunc: (item: never) => void;
 };
 
 const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
-  const {dialPadContent, pinLength, dialPadSize, dialPadTextSize} = props;
+  const {dialPadContent, pinLength, dialPadSize, dialPadTextSize, code, updateCodeFunc} = props;
 
   return (
     <FlatList data={dialPadContent} numColumns={3} keyExtractor={(_, index) => index.toString()} renderItem={({ item }) => {
        return (
-         <TouchableOpacity  disabled={item === ""}>
+         <TouchableOpacity  disabled={item === ""} onPress={() => updateCodeFunc(item as never)}>
            <View style={[
                {
                  backgroundColor: item === "" ? "transparent" : "#fff",
