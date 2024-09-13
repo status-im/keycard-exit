@@ -8,6 +8,7 @@ import Keycard from "react-native-status-keycard";
 import InitializationScreen from './components/steps/InitializationScreen';
 import NFCModal from './NFCModal';
 import MnemonicScreen from './components/steps/MnemonicScreen';
+import AuthenticationScreen from './components/steps/AuthenticationScreen';
 
 enum Step {
   Discovery,
@@ -115,6 +116,7 @@ const Main = () => {
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} ></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true}></MnemonicScreen>}
+      {step == Step.Authentication && <AuthenticationScreen onPressFunc={() => {}}></AuthenticationScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );

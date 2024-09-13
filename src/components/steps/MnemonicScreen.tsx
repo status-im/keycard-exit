@@ -18,16 +18,12 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   const [mnemonic, setMnemonic] = useState('');
   const [pin, setPin] = useState('');
   const [errMessage, setErrMessage] = useState('');
-  const [btnDisabled, setBtnDisabled] = useState(true);
   const [step, setStep] = useState(LoadMnemonicSteps.InsertMnemonic);
 
   const updateMnemonic = (str: string) => {
     const mn = str.split(' ').filter((el: string) => el != "").map((word: string) => word.trim().toLowerCase());
-    const isInMnemonicList = (val: any) => MNEMONIC.includes(val);
 
-    console.log(mn)
-
-    if (!mn.every(isInMnemonicList)) {
+    if (!mn.every((val: string | any) => MNEMONIC.includes(val))) {
       setErrMessage("Wrong mnemonic. Please try again.");
       return;
     }
