@@ -40,7 +40,21 @@ const Main = () => {
     const pairings = await getPairings();
     pairings[instanceUID] = {pairing: pairing};
     return AsyncStorage.setItem("pairings", JSON.stringify(pairings));
-  } 
+  }
+
+  const isCardLost = (err) => {
+    return (err == "Tag was lost.") || err.includes("NFCError:100");
+  }
+
+  const wrongPINCounter = (err) => {
+    const matches = /Unexpected error SW, 0x63C(\d+)|wrongPIN\(retryCounter: (\d+)\)/.exec(err)
+
+    if (matches && matches.length == 2) {
+      return parseInt(matches[1])
+    }
+
+    return null
+  }
 
   const keycardConnectHandler = async () => {
     if (!isListeningCard.current) {
@@ -81,7 +95,20 @@ const Main = () => {
           setStep(Step.Discovery);
           break;
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (isCardLost(err.message)) {
+        console.log("connection to card lost");
+        return;
+      }
+
+      const pinRetryCounter = wrongPINCounter(err.message);
+
+      if (pinRetryCounter !== null) {
+        //TODO: better handling
+        console.log("wrong PIN. Retry counter: " + pinRetryCounter);
+        return;
+      }
+
       console.log(err);
     }
 
