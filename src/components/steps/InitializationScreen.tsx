@@ -39,16 +39,12 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
 
   return (
     <View>
-      { step == PinSteps.InsertPin && <Dialpad prompt={"Insert Pin"} onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
-      { step == PinSteps.RepeatPin && <Dialpad prompt={"Repeat Pin"} onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
+      { step == PinSteps.InsertPin && <Dialpad prompt={"Choose PIN"} onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
+      { step == PinSteps.RepeatPin && <Dialpad prompt={"Repeat PIN"} onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
     </View>
   )};
 
 const styles = StyleSheet.create({
-  heading: {
-    textAlign: 'center',
-    fontSize: 16
-  }
 });
 
 export default InitializationScreen;

@@ -19,7 +19,7 @@ const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
          <TouchableOpacity  disabled={item === ""} onPress={() => updateCodeFunc(item as never)}>
            <View style={[
                {
-                 backgroundColor: item === "" ? "transparent" : "#fff",
+                 borderWidth: item === "" ? 0 : 1,
                  width: dialPadSize,
                  height: dialPadSize,
                },
@@ -27,7 +27,7 @@ const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
              ]}
            >
              {item === "X" ? (
-               <Icon name="delete" size={24} color="#3F1D38" />
+               <Icon name="delete" size={24} color="white" />
              ) : (
                <Text
                  style={[{ fontSize: dialPadTextSize }, styles.dialPadText]}
@@ -49,10 +49,11 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 45,
     padding: 0,
-    borderColor: "transparent",
+    borderColor: "#199515",
   },
   dialPadText: {
-    color: "#3F1D38",
+    color: "white",
+    fontFamily: 'Inconsolata Regular'
   }
   });
 

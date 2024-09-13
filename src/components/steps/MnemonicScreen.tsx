@@ -2,6 +2,7 @@ import {FC, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../Button";
 import { MNEMONIC } from "../../MnemonicList";
+import Dialpad from "../Dialpad";
 
 enum LoadMnemonicSteps {
   InsertMnemonic,
@@ -43,6 +44,11 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
     }
   }
 
+  const submitPin = (p: string) => {
+    onPressFunc(mnemonic, p);
+    return true;
+  }
+
   return (
     <View>
       { step == LoadMnemonicSteps.InsertMnemonic &&
@@ -54,14 +60,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         <Text>{errMessage}</Text>
         </View>
       }
-      { step == LoadMnemonicSteps.InsertPin &&
-      <View>
-        <Text style={styles.heading}> Insert pin</Text>
-        <TextInput onChangeText={setPin} value={pin} keyboardType="number-pad" maxLength={6}/>
-        <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => {onPressFunc(mnemonic, pin)}} btnJustifyContent='center'></Button>
-        <Button label="Back" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} btnJustifyContent='center'></Button>
-      </View>
-      }
+      { step == LoadMnemonicSteps.InsertPin && <Dialpad prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
     </View>
   )};
 

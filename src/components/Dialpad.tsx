@@ -1,8 +1,9 @@
-import { SafeAreaView, StyleSheet, Text, View, Dimensions } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, Dimensions, useColorScheme } from "react-native";
 import React, {FC,  useState } from "react";
 import DialpadKeypad from "./DialpadKeypad";
 import Button from "./Button";
 import DialpadPin from "./DialpadPin";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
  const { width, height } = Dimensions.get("window");
 
@@ -13,6 +14,7 @@ import DialpadPin from "./DialpadPin";
 };
 
 const Dialpad: FC<DialpadProps> = props => {
+  const isDarkMode = useColorScheme() === 'dark';
   const {prompt, onNextFunc, onCancelFunc} = props;
   const dialPadContent = [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "X"];
   const dialPadSize = width * 0.2;
@@ -20,7 +22,7 @@ const Dialpad: FC<DialpadProps> = props => {
   const [code, setCode] = useState([]);
   const pinLength = 6;
   const pinContainerSize = width / 2;
-  const pinSize = pinContainerSize / pinLength;
+  const pinSize = (pinContainerSize / pinLength) + 8;
 
   const updateCode = (item: never) => {
     if (item === "X") {
@@ -40,7 +42,7 @@ const Dialpad: FC<DialpadProps> = props => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: isDarkMode ? Colors.darker : Colors.lighter}]}>
      <View style={styles.textContainer}>
        <Text style={styles.pinText}>{prompt}</Text>
        <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
@@ -48,8 +50,8 @@ const Dialpad: FC<DialpadProps> = props => {
        <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
      </View>
      <View style={styles.btnContainer}>
-     <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onNext} btnJustifyContent='center'></Button>
+     <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='flex-start'></Button>
+     <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onNext} btnJustifyContent='flex-end'></Button>
      </View>
    </SafeAreaView>
   )};
@@ -62,23 +64,25 @@ const styles = StyleSheet.create({
   textContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 30,
     position: "relative",
   },
   pinText: {
-    fontSize: 30,
-    fontWeight: "medium",
+    fontSize: 28,
+    fontFamily: 'Inconsolata Medium',
     color: "white",
   },
   pinSubText: {
     fontSize: 18,
-    fontWeight: "medium",
+    fontFamily: 'Inconsolata Regular',
     color: "white",
     marginVertical: 30,
   },
   btnContainer: {
     flexDirection: 'row',
-    width: '100%',
+    width: '74%',
+    marginLeft: '13%',
+    marginRight: '13%',
     alignItems: 'center'
   }
   });
