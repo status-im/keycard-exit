@@ -1,10 +1,9 @@
 import {FC, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../Button";
-import CustomDialpad from "../CustomDialpad";
+import Dialpad from "../Dialpad";
 
 enum PinSteps {
-  NumPad,
   InsertPin,
   RepeatPin
 }
@@ -17,33 +16,30 @@ type InitializationScreenProps = {
 const  InitializationScreen: FC<InitializationScreenProps> = props => {
   const {onPressFunc, onCancelFunc} = props;
   const [pin, onChangePin] = useState('');
-  const [btnDisabled, setBtnDisabled] = useState(true);
-  const [step, setStep] = useState(PinSteps.NumPad);
+  const [step, setStep] = useState(PinSteps.InsertPin);
 
-  const checkPin = (p: string) => {
-    pin === p ? setBtnDisabled(false) : setBtnDisabled(true);
+  const insertPin = (p: string) => {
+    onChangePin(p);
+    console.log(p);
+    setStep(PinSteps.RepeatPin);
+  }
+
+  const isSamePin = (p: string) => {
+    return pin === p;
+  }
+
+  const submitPin = (p: string) => {
+    if(isSamePin(p)) {
+      onPressFunc(pin);
+    } else {
+      console.log("err");
+    }
   }
 
   return (
     <View>
-      <CustomDialpad onCancelFunc={() => {}} onNextFunc={(code: string | undefined) => {console.log(code)}}></CustomDialpad>
-      { step == PinSteps.InsertPin &&
-      <View>
-      <Text style={styles.heading}> Insert pin</Text>
-      <TextInput onChangeText={onChangePin} value={pin} keyboardType="number-pad" maxLength={6}/>
-      <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => setStep(PinSteps.RepeatPin)} btnJustifyContent='center'></Button>
-      <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-      </View>
-      }
-
-      { step == PinSteps.RepeatPin &&
-      <View>
-      <Text style={styles.heading}> Repeat pin</Text>
-      <TextInput onChangeText={(val) => {checkPin(val)}} keyboardType="number-pad" maxLength={6}/>
-      <Button label="Next" disabled={btnDisabled} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => {onPressFunc(pin)}} btnJustifyContent='center'></Button>
-      <Button label="Back" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => setStep(PinSteps.InsertPin)} btnJustifyContent='center'></Button>
-      </View>
-    }
+      { step == PinSteps.InsertPin && <Dialpad onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
+      { step == PinSteps.RepeatPin && <Dialpad onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
     </View>
   )};
 

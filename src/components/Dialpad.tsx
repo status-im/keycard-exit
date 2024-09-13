@@ -6,12 +6,12 @@ import DialpadPin from "./DialpadPin";
 
  const { width, height } = Dimensions.get("window");
 
- type CustomDialpadProps = {
+ type DialpadProps = {
   onCancelFunc: () => void;
-  onNextFunc: (p?: string) => void;
+  onNextFunc: (p?: any) => void;
 };
 
-const CustomDialpad: FC<CustomDialpadProps> = props => {
+const Dialpad: FC<DialpadProps> = props => {
   const {onNextFunc, onCancelFunc} = props;
   const dialPadContent = [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "X"];
   const dialPadSize = width * 0.2;
@@ -44,7 +44,7 @@ const CustomDialpad: FC<CustomDialpadProps> = props => {
      </View>
      <View style={styles.btnContainer}>
      <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={() => onNextFunc(code.toString())} btnJustifyContent='center'></Button>
+     <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="50%" onChangeFunc={() => onNextFunc(code.join(''))} btnJustifyContent='center'></Button>
      </View>
    </SafeAreaView>
   )};
@@ -78,4 +78,4 @@ const styles = StyleSheet.create({
   }
   });
 
-export default CustomDialpad;
+export default Dialpad;
