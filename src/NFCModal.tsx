@@ -1,8 +1,7 @@
-import React, {FC, useEffect, useState } from "react";
-import {Platform, StyleSheet, Text, useColorScheme, View } from "react-native";
+import React, {FC} from "react";
+import {Platform, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal/dist/modal";
 import Icon from 'react-native-vector-icons/Feather';
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import Button from "./components/Button";
 
 type NFCModalProps = {
@@ -12,11 +11,10 @@ type NFCModalProps = {
 
 const NFCModal: FC<NFCModalProps> = props => {
   const {isVisible, onChangeFunc} = props;
-  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <Modal isVisible={(Platform.OS === 'android') && isVisible} style={modalStyle.modalContainer}>
-        <View style={[modalStyle.container, {backgroundColor: isDarkMode ? Colors.darker : Colors.lighter}]}>
+        <View style={modalStyle.container}>
           <Text style={modalStyle.header}>Ready to Scan</Text>
           <View style={modalStyle.iconContainer}>
           <Icon name="smartphone" size={40} style={modalStyle.icon}/>
@@ -30,7 +28,7 @@ const NFCModal: FC<NFCModalProps> = props => {
 const modalStyle = StyleSheet.create({
   modalContainer: {
     justifyContent: 'flex-end',
-    margin: 0
+    margin: 0,
   },
   container: {
     height: 350,
@@ -39,6 +37,7 @@ const modalStyle = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#222222'
   },
   header: {
     paddingTop: '7%',

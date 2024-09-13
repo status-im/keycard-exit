@@ -1,11 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, View, Dimensions, useColorScheme } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, Dimensions } from "react-native";
 import React, {FC,  useState } from "react";
 import DialpadKeypad from "./DialpadKeypad";
 import Button from "./Button";
 import DialpadPin from "./DialpadPin";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
- const { width, height } = Dimensions.get("window");
+ const { width } = Dimensions.get("window");
 
  type DialpadProps = {
   prompt: string;
@@ -14,7 +13,6 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 };
 
 const Dialpad: FC<DialpadProps> = props => {
-  const isDarkMode = useColorScheme() === 'dark';
   const {prompt, onNextFunc, onCancelFunc} = props;
   const dialPadContent = [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "X"];
   const dialPadSize = width * 0.2;
@@ -42,7 +40,7 @@ const Dialpad: FC<DialpadProps> = props => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: isDarkMode ? Colors.darker : Colors.lighter}]}>
+    <SafeAreaView style={styles.container}>
      <View style={styles.textContainer}>
        <Text style={styles.pinText}>{prompt}</Text>
        <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
@@ -58,8 +56,8 @@ const Dialpad: FC<DialpadProps> = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4A646C55",
-    height: '100%'
+    backgroundColor: "#222222",
+    height: '100%',
   },
   textContainer: {
     justifyContent: "center",

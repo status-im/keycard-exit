@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StyleSheet, useColorScheme, DeviceEventEmitter } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { SafeAreaView, StyleSheet, DeviceEventEmitter } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DiscoveryScreen from './components/steps/DiscoveryScreen';
@@ -20,7 +19,6 @@ enum Step {
 }
 
 const Main = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
 
@@ -134,10 +132,6 @@ const Main = () => {
     }
   });
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   const connectCard = async () => {
     if (await Keycard.nfcIsSupported() && !await Keycard.nfcIsEnabled()) {
       await Keycard.openNfcSettings();
@@ -168,7 +162,7 @@ const Main = () => {
   }
 
   return (
-    <SafeAreaView style={[backgroundStyle, styles.container]}>
+    <SafeAreaView style={styles.container}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true} onCancelFunc={cancel}></MnemonicScreen>}
@@ -180,6 +174,7 @@ const Main = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#222222',
     width: '100%',
     height: '100%'
   },

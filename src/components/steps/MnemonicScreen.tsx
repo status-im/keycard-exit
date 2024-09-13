@@ -18,7 +18,6 @@ type MnemonicScreenProps = {
 const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   const {pinRequired, onPressFunc, onCancelFunc} = props;
   const [mnemonic, setMnemonic] = useState('');
-  const [pin, setPin] = useState('');
   const [errMessage, setErrMessage] = useState('');
   const [step, setStep] = useState(LoadMnemonicSteps.InsertMnemonic);
 
@@ -52,12 +51,16 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   return (
     <View>
       { step == LoadMnemonicSteps.InsertMnemonic &&
-      <View>
+      <View style={styles.container}>
         <Text style={styles.heading}> Load mnemonic</Text>
-        <TextInput editable multiline numberOfLines={6} onChangeText={(val) => setMnemonic(val)} value={mnemonic} style={{backgroundColor: '#4A646C'}} />
-        <Button label="Next" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={() => updateMnemonic(mnemonic)} btnJustifyContent='center'></Button>
-        <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
-        <Text>{errMessage}</Text>
+        <View style={styles.mnemonicContainer}>
+          <TextInput editable multiline onChangeText={(val) => setMnemonic(val)} value={mnemonic} style={styles.mnemonic} placeholder="Type your passphrase"/>
+        </View>
+        <View style={styles.btnContainer}>
+          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='flex-start'></Button>
+          <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => updateMnemonic(mnemonic)} btnJustifyContent='flex-end'></Button>
+        </View>
+        <Text style={styles.errorMessage}>{errMessage}</Text>
         </View>
       }
       { step == LoadMnemonicSteps.InsertPin && <Dialpad prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
@@ -65,9 +68,43 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   )};
 
 const styles = StyleSheet.create({
+  container: {
+    width: '89%',
+    marginLeft: '5.5%',
+    marginRight: '5.5%'
+  },
   heading: {
     textAlign: 'center',
+    marginTop: 30,
+    fontSize: 28,
+    fontFamily: 'Inconsolata Medium',
+    color: "white",
+    paddingBottom: 20
+  },
+  mnemonicContainer: {
+    width: '100%',
+    height: 300,
+    borderColor: '#199515',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderStyle: 'dashed'
+  },
+  mnemonic: {
+    textAlignVertical: 'bottom',
+    fontFamily: 'Inconsolata Regular',
     fontSize: 16
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    width: '90%',
+    marginLeft: '5%',
+    marginRight: '5%',
+    alignItems: 'center'
+  },
+  errorMessage: {
+    fontFamily: 'Inconsolata Regular',
+    textAlign: 'center',
+    paddingTop: '10%'
   }
 });
 

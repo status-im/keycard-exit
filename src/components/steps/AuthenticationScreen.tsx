@@ -14,7 +14,8 @@ const  AuthenticationScreen: FC<AuthenticationScreenProps> = props => {
     <View>
       <View>
         <Text style={styles.heading}> Success</Text>
-        <Button label="Cancel" disabled={false} btnColor="#4A646C" btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+        <Text style={styles.prompt}>Work in progress...</Text>
+        <Button label="Home" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
         </View>
     </View>
   )};
@@ -22,7 +23,17 @@ const  AuthenticationScreen: FC<AuthenticationScreenProps> = props => {
 const styles = StyleSheet.create({
   heading: {
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 30,
+    fontFamily: 'Inconsolata Medium',
+    color: '#199515',
+    marginTop: '50%'
+  },
+  prompt: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontFamily: 'Inconsolata Regular',
+    color: 'white',
+    marginTop: '5%'
   }
 });
 
