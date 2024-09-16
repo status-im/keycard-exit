@@ -4,10 +4,11 @@ import Button from "../Button";
 
 type DiscoveryScreenProps = {
   onPressFunc: () => void;
+  onFactoryResetFunc: () => void;
 };
 
 const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
-  const {onPressFunc} = props;
+  const {onPressFunc, onFactoryResetFunc} = props;
 
   return (
     <View style={styles.container}>
@@ -16,6 +17,7 @@ const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
       </View>
       <View style={styles.btnContainer}>
       <Button label="Connect" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
+      <Button label="Factory reset" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onFactoryResetFunc} btnJustifyContent='center'></Button>
       </View>
       <View>
     </View>

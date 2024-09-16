@@ -35,6 +35,7 @@ const buttonStyle = StyleSheet.create({
     button: {
     },
     title: {
+      color: "white",
       textTransform: 'uppercase',
       fontFamily: 'Inconsolata Medium',
     },

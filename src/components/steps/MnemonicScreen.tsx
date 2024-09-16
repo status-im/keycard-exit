@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed'
   },
   mnemonic: {
+    color: "white",
     textAlignVertical: 'bottom',
     fontFamily: 'Inconsolata Regular',
     fontSize: 16
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   errorMessage: {
+    color: "white",
     fontFamily: 'Inconsolata Regular',
     textAlign: 'center',
     paddingTop: '10%'

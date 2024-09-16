@@ -15,7 +15,8 @@ enum Step {
   Discovery,
   Initialization,
   Loading,
-  Authentication
+  Authentication,
+  FactoryReset,
 }
 
 const Main = () => {
@@ -88,6 +89,10 @@ const Main = () => {
         case Step.Authentication:
           setStep(Step.Discovery);
           break;
+        case Step.FactoryReset:
+          Keycard.factoryReset();
+          setStep(Step.Discovery);
+          break;
         default:
           setStep(Step.Discovery);
           break;
@@ -142,6 +147,12 @@ const Main = () => {
     setIsModalVisible(true);
   }
 
+  const factoryResetCard = async () => {
+    stepRef.current = Step.FactoryReset;
+    setStep(Step.FactoryReset);
+    return connectCard();
+  }
+
   const initPin = async (p: string) => {
     pinRef.current = p;
     return connectCard();
@@ -163,7 +174,7 @@ const Main = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
+      {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={factoryResetCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true} onCancelFunc={cancel}></MnemonicScreen>}
       {step == Step.Authentication && <AuthenticationScreen onPressFunc={() => {} } onCancelFunc={cancel}></AuthenticationScreen>}
