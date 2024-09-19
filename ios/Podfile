@@ -23,6 +23,12 @@ target 'keycardExit' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'SSZipArchive', '2.4.3'
+
+  pod "react-native-status-keycard", path: "../node_modules/react-native-status-keycard"
+  pod "Keycard", git: "https://github.com/status-im/Keycard.swift.git", branch: "ident-command"
+  pod 'secp256k1', git: "https://github.com/status-im/secp256k1.swift.git", submodules: true
+
   target 'keycardExitTests' do
     inherit! :complete
     # Pods for testing
