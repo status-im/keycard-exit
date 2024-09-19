@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     paddingTop: '50%',
   },
   heading: {
+    color: 'white',
     textAlign: 'center',
     fontSize: 18,
     fontFamily: 'Inconsolata Regular'
