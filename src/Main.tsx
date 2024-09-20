@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StyleSheet, DeviceEventEmitter } from 'react-native';
+import { SafeAreaView, StyleSheet, NativeEventEmitter } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DiscoveryScreen from './components/steps/DiscoveryScreen';
@@ -61,7 +61,6 @@ const Main = () => {
 
     try {
       const appInfo = await Keycard.getApplicationInfo();
-
       if (appInfo["new-pairing"]) {
         await addPairing(appInfo["instance-uid"], appInfo["new-pairing"]);
       }
@@ -122,6 +121,12 @@ const Main = () => {
     stepRef.current = step;
     isListeningCard.current = isModalVisible;
 
+    const eventEmitter = new NativeEventEmitter(Keycard);
+    let onConnectedListener = eventEmitter.addListener('keyCardOnConnected', keycardConnectHandler);
+    let onDisconnectedListener = eventEmitter.addListener('keyCardOnDisconnected', () => console.log("keycard disconnected"));
+    let onNFCEnabledListener = eventEmitter.addListener('keyCardOnNFCEnabled', () => console.log("nfc enabled"));
+    let onNFCDisabledListener = eventEmitter.addListener('keyCardOnNFCDisabled', () => console.log("nfc disabled"));
+
     if (!didMount.current) {
       didMount.current = true;
 
@@ -130,11 +135,14 @@ const Main = () => {
       };
 
       loadPairing().catch(console.log);
-      DeviceEventEmitter.addListener("keyCardOnConnected", keycardConnectHandler);
-      DeviceEventEmitter.addListener("keyCardOnDisconnected", () => console.log("keycard disconnected"));
-      DeviceEventEmitter.addListener("keyCardOnNFCEnabled", () => console.log("nfc enabled"));
-      DeviceEventEmitter.addListener("keyCardOnNFCDisabled", () => console.log("nfc disabled"));
     }
+
+    return () => {
+      onConnectedListener.remove();
+      onDisconnectedListener.remove();
+      onNFCEnabledListener.remove();
+      onNFCDisabledListener.remove();
+    };
   });
 
   const connectCard = async () => {
