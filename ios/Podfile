@@ -26,7 +26,7 @@ target 'keycardExit' do
   pod 'SSZipArchive', '2.4.3'
 
   pod "react-native-status-keycard", path: "../node_modules/react-native-status-keycard"
-  pod "Keycard", git: "https://github.com/status-im/Keycard.swift.git", branch: "ident-command"
+  pod "Keycard", git: "https://github.com/status-im/Keycard.swift.git", tag: '3.1.0'
   pod 'secp256k1', git: "https://github.com/status-im/secp256k1.swift.git", submodules: true
 
   target 'keycardExitTests' do
