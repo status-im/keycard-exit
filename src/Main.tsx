@@ -89,7 +89,7 @@ const Main = () => {
           setStep(Step.Discovery);
           break;
         case Step.FactoryReset:
-          Keycard.factoryReset();
+          await Keycard.factoryReset();
           setStep(Step.Discovery);
           break;
         default:
