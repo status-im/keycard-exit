@@ -11,12 +11,13 @@ enum LoadMnemonicSteps {
 
 type MnemonicScreenProps = {
   pinRequired: boolean;
+  pinRetryCounter: number;
   onPressFunc: (mn: string, pin?: string) => void;
   onCancelFunc: () => void;
 };
 
 const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
-  const {pinRequired, onPressFunc, onCancelFunc} = props;
+  const {pinRequired, pinRetryCounter, onPressFunc, onCancelFunc} = props;
   const [mnemonic, setMnemonic] = useState('');
   const [errMessage, setErrMessage] = useState('');
   const [step, setStep] = useState(LoadMnemonicSteps.InsertMnemonic);
@@ -63,7 +64,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         <Text style={styles.errorMessage}>{errMessage}</Text>
         </View>
       }
-      { step == LoadMnemonicSteps.InsertPin && <Dialpad prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
+      { step == LoadMnemonicSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
     </View>
   )};
 

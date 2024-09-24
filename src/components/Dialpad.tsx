@@ -7,17 +7,19 @@ import DialpadPin from "./DialpadPin";
  const { width } = Dimensions.get("window");
 
  type DialpadProps = {
+  pinRetryCounter: number;
   prompt: string;
   onCancelFunc: () => void;
   onNextFunc: (p?: any) => boolean;
 };
 
 const Dialpad: FC<DialpadProps> = props => {
-  const {prompt, onNextFunc, onCancelFunc} = props;
+  const {pinRetryCounter, prompt, onNextFunc, onCancelFunc} = props;
   const dialPadContent = [1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "X"];
   const dialPadSize = width * 0.2;
   const dialPadTextSize = dialPadSize * 0.36;
   const [code, setCode] = useState([]);
+  const [wrongRepeat, setWrongRepeat] = useState(false);
   const pinLength = 6;
   const pinContainerSize = width / 2;
   const pinSize = (pinContainerSize / pinLength) + 8;
@@ -34,9 +36,8 @@ const Dialpad: FC<DialpadProps> = props => {
   }
 
   const onNext = () =>  {
-    if (!onNextFunc(code.join(''))) {
-      setCode([]);
-    }
+    setWrongRepeat(!onNextFunc(code.join('')));
+    setCode([]);
   }
 
   return (
@@ -44,6 +45,8 @@ const Dialpad: FC<DialpadProps> = props => {
      <View style={styles.textContainer}>
        <Text style={styles.pinText}>{prompt}</Text>
        <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
+       {pinRetryCounter >= 0 && <Text style={styles.pinAttempts}>Remaining attempts: {pinRetryCounter}</Text>}
+       {wrongRepeat && <Text style={styles.pinAttempts}>The PINs do not match</Text>}
        <DialpadPin pinLength={pinLength} pinSize={pinSize} code={code} dialPadContent={dialPadContent} />
        <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
      </View>
@@ -76,6 +79,14 @@ const styles = StyleSheet.create({
     color: "white",
     marginVertical: 30,
   },
+
+  pinAttempts: {
+    fontSize: 18,
+    fontFamily: 'Inconsolata Regular',
+    color: "white",
+    marginTop: -10,
+    marginBottom: 30
+  },  
   btnContainer: {
     flexDirection: 'row',
     width: '74%',

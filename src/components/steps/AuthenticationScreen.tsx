@@ -3,12 +3,13 @@ import { StyleSheet, Text, View } from "react-native";
 import Button from "../Button";
 
 type AuthenticationScreenProps = {
+  pinRetryCounter: number;
   onPressFunc: () => void;
   onCancelFunc: () => void;
 };
 
 const  AuthenticationScreen: FC<AuthenticationScreenProps> = props => {
-  const {onPressFunc, onCancelFunc} = props;
+  const {pinRetryCounter, onPressFunc, onCancelFunc} = props;
 
   return (
     <View>

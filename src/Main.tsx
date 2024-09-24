@@ -6,6 +6,7 @@ import DiscoveryScreen from './components/steps/DiscoveryScreen';
 import InitializationScreen from './components/steps/InitializationScreen';
 import MnemonicScreen from './components/steps/MnemonicScreen';
 import AuthenticationScreen from './components/steps/AuthenticationScreen';
+import FactoryResetScreen from './components/steps/FactoryResetScreen';
 import NFCModal from './NFCModal';
 
 //@ts-ignore
@@ -20,8 +21,11 @@ enum Step {
 }
 
 const Main = () => {
+  const PIN_MAX_RETRY = 3;
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
+  const [pinCounter, setPinCounter] = useState(PIN_MAX_RETRY);
 
   const didMount = useRef(false);
   const stepRef = useRef(step);
@@ -41,14 +45,18 @@ const Main = () => {
   }
 
   const isCardLost = (err) => {
-    return (err == "Tag was lost.") || err.includes("NFCError:100");
+    return (err == "Tag was lost.") || /"NFCError:10[02]"/.test(err)
   }
 
   const wrongPINCounter = (err) => {
-    const matches = /Unexpected error SW, 0x63C(\d+)|wrongPIN\(retryCounter: (\d+)\)/.exec(err)
+    const matches = /Unexpected error SW, 0x63C(\d)|wrongPIN\(retryCounter: (\d+)\)/.exec(err)
 
-    if (matches && matches.length == 2) {
-      return parseInt(matches[1])
+    if (matches) {
+      if (matches[1] !== undefined) {
+        return parseInt(matches[1])
+      } else {
+        return parseInt(matches[2])
+      }
     }
 
     return null
@@ -59,10 +67,16 @@ const Main = () => {
       return;
     }
 
+    var newPinCounter = pinCounter;
+
     try {
       const appInfo = await Keycard.getApplicationInfo();
       if (appInfo["new-pairing"]) {
         await addPairing(appInfo["instance-uid"], appInfo["new-pairing"]);
+      }
+
+      if (appInfo["pin-retry-counter"] !== null) {
+        newPinCounter = appInfo["pin-retry-counter"];
       }
 
       switch (stepRef.current) {
@@ -105,14 +119,20 @@ const Main = () => {
       const pinRetryCounter = wrongPINCounter(err.message);
 
       if (pinRetryCounter !== null) {
-        //TODO: better handling
+        pinRef.current = ""
+        newPinCounter = pinRetryCounter;
         console.log("wrong PIN. Retry counter: " + pinRetryCounter);
-        return;
+      } else {
+        console.log(err);
       }
-
-      console.log(err);
     }
 
+    if (newPinCounter == 0) {
+      setStep(Step.FactoryReset);
+    }
+
+    setPinCounter(newPinCounter);
+    
     await Keycard.stopNFC("");
     setIsModalVisible(false);
   }
@@ -155,10 +175,9 @@ const Main = () => {
     setIsModalVisible(true);
   }
 
-  const factoryResetCard = async () => {
+  const startFactoryReset = async () => {
     stepRef.current = Step.FactoryReset;
     setStep(Step.FactoryReset);
-    return connectCard();
   }
 
   const initPin = async (p: string) => {
@@ -180,12 +199,17 @@ const Main = () => {
     setStep(Step.Discovery);
   }
 
+  const pinDisplayCounter = () => {
+    return pinCounter == PIN_MAX_RETRY ? -1 : pinCounter;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={factoryResetCard}></DiscoveryScreen>}
+      {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={startFactoryReset}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
-      {step == Step.Loading && <MnemonicScreen onPressFunc={loadMnemonic} pinRequired={pinRef.current ? false : true} onCancelFunc={cancel}></MnemonicScreen>}
-      {step == Step.Authentication && <AuthenticationScreen onPressFunc={() => {} } onCancelFunc={cancel}></AuthenticationScreen>}
+      {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
+      {step == Step.Authentication && <AuthenticationScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={() => {} } onCancelFunc={cancel}></AuthenticationScreen>}
+      {step == Step.FactoryReset && <FactoryResetScreen  pinRetryCounter={pinDisplayCounter()}  onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );
