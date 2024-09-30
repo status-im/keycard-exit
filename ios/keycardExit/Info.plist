@@ -10,6 +10,8 @@
 	</array>
 	<key>NFCReaderUsageDescription</key>
 	<string>Enable Keycard</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

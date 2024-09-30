@@ -5,23 +5,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DiscoveryScreen from './components/steps/DiscoveryScreen';
 import InitializationScreen from './components/steps/InitializationScreen';
 import MnemonicScreen from './components/steps/MnemonicScreen';
-import AuthenticationScreen from './components/steps/AuthenticationScreen';
+import HomeScreen from './components/steps/HomeScreen';
 import FactoryResetScreen from './components/steps/FactoryResetScreen';
 import NFCModal from './NFCModal';
 
 //@ts-ignore
 import Keycard from "react-native-status-keycard";
+import Dialpad from './components/Dialpad';
 
 enum Step {
   Discovery,
   Initialization,
   Loading,
   Authentication,
+  Home,
   FactoryReset,
 }
 
 const Main = () => {
   const PIN_MAX_RETRY = 3;
+  const WALLET_DERIVATION_PATH = "m/84'/0'/0'/0/0";
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
@@ -32,6 +35,9 @@ const Main = () => {
   const pinRef = useRef("");
   const mnemonicRef = useRef("");
   const isListeningCard = useRef(false);
+  const walletKey = useRef("");
+  const sessionId = useRef("")
+  const challenge = useRef("")
 
   const getPairings = async () => {
     const pairingJSON = await AsyncStorage.getItem("pairings");
@@ -97,10 +103,10 @@ const Main = () => {
           break;
         case Step.Loading:
           await Keycard.saveMnemonic(mnemonicRef.current, pinRef.current);
-          setStep(Step.Authentication);
-          break;
+          //fallthrough
         case Step.Authentication:
-          setStep(Step.Discovery);
+          walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
+          setStep(Step.Home);
           break;
         case Step.FactoryReset:
           await Keycard.factoryReset();
@@ -195,6 +201,16 @@ const Main = () => {
     return connectCard();
   }
 
+  const authenticate = (pin: string) => {
+    pinRef.current = pin
+    connectCard();
+    return true;
+  }
+
+  const login = (sessionId: string, challenge: string) => {
+
+  }
+
   const cancel = () => {
     setStep(Step.Discovery);
   }
@@ -208,8 +224,9 @@ const Main = () => {
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={startFactoryReset}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
-      {step == Step.Authentication && <AuthenticationScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={() => {} } onCancelFunc={cancel}></AuthenticationScreen>}
-      {step == Step.FactoryReset && <FactoryResetScreen  pinRetryCounter={pinDisplayCounter()}  onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
+      {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Choose PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
+      {step == Step.Home && <HomeScreen walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel}></HomeScreen>}
+      {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
     </SafeAreaView>
   );

@@ -1533,6 +1533,12 @@ PODS:
   - secp256k1 (0.1.6)
   - SocketRocket (0.7.0)
   - SSZipArchive (2.4.3)
+  - VisionCamera (4.5.3):
+    - VisionCamera/Core (= 4.5.3)
+    - VisionCamera/React (= 4.5.3)
+  - VisionCamera/Core (4.5.3)
+  - VisionCamera/React (4.5.3):
+    - React-Core
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1605,6 +1611,7 @@ DEPENDENCIES:
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - secp256k1 (from `https://github.com/status-im/secp256k1.swift.git`)
   - SSZipArchive (= 2.4.3)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1750,6 +1757,8 @@ EXTERNAL SOURCES:
   secp256k1:
     :git: https://github.com/status-im/secp256k1.swift.git
     :submodules: true
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1833,6 +1842,7 @@ SPEC CHECKSUMS:
   secp256k1: f61d67e6fdcb85fd727acf1bf35ace6036db540c
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
+  VisionCamera: cb84d0d8485b3e67c91b62931d3aa88f49747c92
   Yoga: 4ef80d96a5534f0e01b3055f17d1e19a9fc61b63
 
 PODFILE CHECKSUM: d4103e04bbadf298531160a2567acefe236dd9f8
