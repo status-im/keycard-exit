@@ -6,7 +6,7 @@ import Button from "./components/Button";
 
 type NFCModalProps = {
   isVisible: boolean;
-  onChangeFunc: (val: boolean) => void;
+  onChangeFunc: () => void;
 };
 
 const NFCModal: FC<NFCModalProps> = props => {
@@ -20,7 +20,7 @@ const NFCModal: FC<NFCModalProps> = props => {
           <Icon name="smartphone" size={40} style={modalStyle.icon}/>
           </View>
           <Text style={modalStyle.prompt}>Tap your Keycard</Text>
-          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnFontSize={13} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => onChangeFunc(!isVisible)} btnJustifyContent='center'></Button>
+          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnFontSize={13} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => onChangeFunc()} btnJustifyContent='center'></Button>
         </View>
     </Modal>
   )};

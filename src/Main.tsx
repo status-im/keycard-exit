@@ -37,7 +37,6 @@ const Main = () => {
   const stepRef = useRef(step);
   const pinRef = useRef("");
   const mnemonicRef = useRef("");
-  const isListeningCard = useRef(false);
   const walletKey = useRef("");
   const sessionRef = useRef("")
   const challengeRef = useRef("")
@@ -88,10 +87,6 @@ const Main = () => {
   }
 
   const keycardConnectHandler = async () => {
-    if (!isListeningCard.current) {
-      return;
-    }
-
     var newPinCounter = pinCounter;
     var loginReq = "";
 
@@ -162,8 +157,7 @@ const Main = () => {
 
     setPinCounter(newPinCounter);
     
-    await Keycard.stopNFC("");
-    setIsModalVisible(false);
+    await stopNFC();
 
     if (loginReq) {
       console.log(loginReq);
@@ -189,7 +183,6 @@ const Main = () => {
 
   useEffect(() => {
     stepRef.current = step;
-    isListeningCard.current = isModalVisible;
 
     const eventEmitter = new NativeEventEmitter(Keycard);
     let onConnectedListener = eventEmitter.addListener('keyCardOnConnected', keycardConnectHandler);
@@ -265,6 +258,11 @@ const Main = () => {
     return pinCounter == PIN_MAX_RETRY ? -1 : pinCounter;
   }
 
+  const stopNFC = async () => {
+    await Keycard.stopNFC("");
+    setIsModalVisible(false);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={startFactoryReset}></DiscoveryScreen>}
@@ -273,7 +271,7 @@ const Main = () => {
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Choose PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
-      <NFCModal isVisible={isModalVisible} onChangeFunc={setIsModalVisible}></NFCModal>
+      <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </SafeAreaView>
   );
 }
