@@ -12,6 +12,8 @@ import NFCModal from './NFCModal';
 //@ts-ignore
 import Keycard from "react-native-status-keycard";
 import Dialpad from './components/Dialpad';
+import { sha256 } from '@noble/hashes/sha256';
+import { bytesToHex } from '@noble/hashes/utils';
 
 enum Step {
   Discovery,
@@ -25,6 +27,7 @@ enum Step {
 const Main = () => {
   const PIN_MAX_RETRY = 3;
   const WALLET_DERIVATION_PATH = "m/84'/0'/0'/0/0";
+  const LOGIN_ENDPOINT = "https://exit.logos.co/keycard/auth";
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
@@ -36,8 +39,8 @@ const Main = () => {
   const mnemonicRef = useRef("");
   const isListeningCard = useRef(false);
   const walletKey = useRef("");
-  const sessionId = useRef("")
-  const challenge = useRef("")
+  const sessionRef = useRef("")
+  const challengeRef = useRef("")
 
   const getPairings = async () => {
     const pairingJSON = await AsyncStorage.getItem("pairings");
@@ -68,12 +71,29 @@ const Main = () => {
     return null
   }
 
+  const loginRequest = async () => {
+    var req = {'session-id': sessionRef.current};
+
+    const identChallenge = bytesToHex(sha256('Keycard auth' + challengeRef.current));  
+    const data = await Keycard.verifyCard(identChallenge);
+    req['keycard-auth'] = data['tlv-data'];
+
+    const walletChallenge = bytesToHex(sha256('Wallet auth' + challengeRef.current));
+    req['wallet-auth'] = await Keycard.signWithPath(pinRef.current, WALLET_DERIVATION_PATH, walletChallenge);
+
+    challengeRef.current = "";
+    sessionRef.current = "";
+
+    return JSON.stringify(req);
+  }
+
   const keycardConnectHandler = async () => {
     if (!isListeningCard.current) {
       return;
     }
 
     var newPinCounter = pinCounter;
+    var loginReq = "";
 
     try {
       const appInfo = await Keycard.getApplicationInfo();
@@ -108,6 +128,9 @@ const Main = () => {
           walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
           setStep(Step.Home);
           break;
+        case Step.Home:
+          loginReq = await loginRequest();
+          break;
         case Step.FactoryReset:
           await Keycard.factoryReset();
           setStep(Step.Discovery);
@@ -141,6 +164,27 @@ const Main = () => {
     
     await Keycard.stopNFC("");
     setIsModalVisible(false);
+
+    if (loginReq) {
+      console.log(loginReq);
+      
+      try {
+        const resp = await fetch(LOGIN_ENDPOINT, {
+          method: 'POST',
+          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+          body: loginReq,
+        });
+
+        const respJson = resp.json();
+        if (respJson['error']) {
+          //TODO: handle error
+        }
+
+        //TODO: handle success
+      } catch (e) {
+        //TODO: handle error
+      }
+    }
   }
 
   useEffect(() => {
@@ -208,7 +252,9 @@ const Main = () => {
   }
 
   const login = (sessionId: string, challenge: string) => {
-
+    sessionRef.current = sessionId;
+    challengeRef.current = challenge;
+    return connectCard();
   }
 
   const cancel = () => {

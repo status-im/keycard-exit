@@ -23,9 +23,20 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
     onCodeScanned: (codes) => {
-      console.log(`Scanned ${codes.length} codes!`)
-      //TODO: implement
-      setStep(HomeSteps.Home);
+      if ((codes.length != 1) || !codes[0].value) {
+        return;
+      }
+
+      try {
+        const payload = JSON.parse(codes[0].value);
+
+        if (!payload["challenge"] || !payload["session-id"]) {
+          return;
+        }
+
+        setStep(HomeSteps.Home);
+        onPressFunc(payload["session-id"], payload["challenge"]);
+      } catch(e) {}
     }
   });
 
