@@ -2,6 +2,10 @@ import {FC, useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import Button from "../Button";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
+import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
+import { bech32 } from "bech32";
+import { ripemd160 } from "@noble/hashes/ripemd160";
+import { sha256 } from "@noble/hashes/sha256";
 
 enum HomeSteps {
   Home,
@@ -41,7 +45,18 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
   });
 
   const walletAddress = () => {
-    return walletKey;
+    var pubkey = hexToBytes(walletKey);
+    if (pubkey[0] == 0x04 && (pubkey.length == 65)) {
+      pubkey[0] = 0x02 | (pubkey[64] & 1);
+      pubkey = pubkey.slice(0, 33);
+    }
+
+    const hash = ripemd160(sha256(pubkey));
+    
+    var words = bech32.toWords(hash);
+    words.unshift(0);
+
+    return bech32.encode('bc', words);
   }
 
   useEffect(() => {
