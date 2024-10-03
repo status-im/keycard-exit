@@ -6,11 +6,11 @@ import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
 import { bech32 } from "bech32";
 import { ripemd160 } from "@noble/hashes/ripemd160";
 import { sha256 } from "@noble/hashes/sha256";
+import ReceiveModal from "../../ReceiveModal";
 
 enum HomeSteps {
   Home,
-  ScanCode,
-  ShowAddress,
+  ScanCode
 }
 
 type HomeScreenProps = {
@@ -22,6 +22,7 @@ type HomeScreenProps = {
 const  HomeScreen: FC<HomeScreenProps> = props => {
   const {walletKey, onPressFunc, onCancelFunc} = props;
   const [step, setStep] = useState(HomeSteps.Home);
+  const [receiveVisible, setReceiveVisible] = useState(false)
   const cameraDevice = useCameraDevice('back');
   const {hasPermission, requestPermission} = useCameraPermission();
   const codeScanner = useCodeScanner({
@@ -69,15 +70,13 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
 
   if (step == HomeSteps.Home) {
     return <SafeAreaView>
-      <Text style={styles.prompt}>{walletAddress()}</Text>
       <Button label="Scan" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setStep(HomeSteps.ScanCode)} btnJustifyContent='center'></Button>
-      <Button label="Receive" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setStep(HomeSteps.ShowAddress)} btnJustifyContent='center'></Button>
+      <Button label="Receive" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setReceiveVisible(true)} btnJustifyContent='center'></Button>
       <Button label="Cancel" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+      <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={() => {setReceiveVisible(false)} } />
     </SafeAreaView>
   } else if (step == HomeSteps.ScanCode) {
     return <Camera style={StyleSheet.absoluteFill} device={cameraDevice!} isActive={true} codeScanner={codeScanner}/>
-  } else {
-    return <SafeAreaView></SafeAreaView>
   }
 };
 
