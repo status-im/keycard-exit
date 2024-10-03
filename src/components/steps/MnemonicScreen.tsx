@@ -1,10 +1,14 @@
 import {FC, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import * as bip39 from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english';
 import Button from "../Button";
 import { MNEMONIC } from "../../MnemonicList";
 import Dialpad from "../Dialpad";
 
 enum LoadMnemonicSteps {
+  Home,
+  CreateMnemonic,
   InsertMnemonic,
   InsertPin
 }
@@ -20,7 +24,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   const {pinRequired, pinRetryCounter, onPressFunc, onCancelFunc} = props;
   const [mnemonic, setMnemonic] = useState('');
   const [errMessage, setErrMessage] = useState('');
-  const [step, setStep] = useState(LoadMnemonicSteps.InsertMnemonic);
+  const [step, setStep] = useState(LoadMnemonicSteps.Home);
 
   const updateMnemonic = (str: string) => {
     const mn = str.split(' ').filter((el: string) => el != "").map((word: string) => word.trim().toLowerCase());
@@ -36,12 +40,15 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
     }
 
     setErrMessage("");
+    submitMnemonic(mn.join(' '));
+  }
 
+  const submitMnemonic = (mn: string) => {
     if(pinRequired) {
       setStep(LoadMnemonicSteps.InsertPin);
     } else {
-      onPressFunc(mn.join(' '));
-    }
+      onPressFunc(mn);
+    }    
   }
 
   const submitPin = (p: string) => {
@@ -49,8 +56,21 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
     return true;
   }
 
+  const generateMnemonic = () => {
+    setMnemonic(bip39.generateMnemonic(wordlist));
+    setStep(LoadMnemonicSteps.CreateMnemonic);
+  }
+
   return (
     <View>
+      { step == LoadMnemonicSteps.Home &&
+      <View style={styles.container}>
+        <Text style={styles.heading}> Load card</Text>
+        <Button label="Import using seed phrase" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} btnJustifyContent='center'></Button>
+        <Button label="Create a new wallet" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={generateMnemonic} btnJustifyContent='center'></Button>
+        <Button label="Cancel" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+      </View>
+      }
       { step == LoadMnemonicSteps.InsertMnemonic &&
       <View style={styles.container}>
         <Text style={styles.heading}> Load mnemonic</Text>
@@ -58,11 +78,18 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
           <TextInput editable multiline onChangeText={(val) => setMnemonic(val)} value={mnemonic} style={styles.mnemonic} placeholder="Type your passphrase"/>
         </View>
         <View style={styles.btnContainer}>
-          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='flex-start'></Button>
+          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => setStep(LoadMnemonicSteps.Home)} btnJustifyContent='flex-start'></Button>
           <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => updateMnemonic(mnemonic)} btnJustifyContent='flex-end'></Button>
         </View>
         <Text style={styles.errorMessage}>{errMessage}</Text>
         </View>
+      }
+      { step == LoadMnemonicSteps.CreateMnemonic &&
+      <View style={styles.container}>
+        <Text> {mnemonic}</Text>
+        <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => setStep(LoadMnemonicSteps.Home)} btnJustifyContent='flex-start'></Button>
+        <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => submitMnemonic(mnemonic)} btnJustifyContent='flex-end'></Button>
+      </View>
       }
       { step == LoadMnemonicSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
     </View>
