@@ -121,6 +121,7 @@ const Main = () => {
           //fallthrough
         case Step.Authentication:
           walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
+          await AsyncStorage.setItem("wallet-key", walletKey.current);
           setStep(Step.Home);
           break;
         case Step.Home:
@@ -169,7 +170,7 @@ const Main = () => {
           body: loginReq,
         });
 
-        const respJson = resp.json();
+        const respJson = await resp.json();
         if (respJson['error']) {
           //TODO: handle error
         }
@@ -193,11 +194,17 @@ const Main = () => {
     if (!didMount.current) {
       didMount.current = true;
 
-      const loadPairing = async () => {
+      const loadData = async () => {
         await Keycard.setPairings(await getPairings());
+        const tmp = await AsyncStorage.getItem("wallet-key");
+        walletKey.current = tmp !== null ? tmp : "";
+
+        if (walletKey.current) {
+          setStep(Step.Home);
+        }
       };
 
-      loadPairing().catch(console.log);
+      loadData().catch(console.log);
     }
 
     return () => {
@@ -244,13 +251,19 @@ const Main = () => {
     return true;
   }
 
-  const login = (sessionId: string, challenge: string) => {
+  const login = (sessionId: string, challenge: string, p?: string) => {
+    if (p) {
+      pinRef.current = p;
+    }
+
     sessionRef.current = sessionId;
     challengeRef.current = challenge;
     return connectCard();
   }
 
   const cancel = () => {
+    walletKey.current = "";
+    AsyncStorage.removeItem("wallet-key");
     setStep(Step.Discovery);
   }
 
@@ -269,7 +282,7 @@ const Main = () => {
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Choose PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
-      {step == Step.Home && <HomeScreen walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel}></HomeScreen>}
+      {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </SafeAreaView>
