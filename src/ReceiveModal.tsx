@@ -39,12 +39,12 @@ const modalStyle = StyleSheet.create({
   header: {
     paddingTop: '7%',
     fontSize: 22,
-    fontFamily: 'Inconsolata Regular'
+    fontFamily: 'Inter'
   },
   prompt: {
     paddingTop: '10%',
     fontSize: 16,
-    fontFamily: 'Inconsolata Regular'
+    fontFamily: 'Inter'
   },
   iconContainer: {
     width: 80,

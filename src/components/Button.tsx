@@ -37,7 +37,7 @@ const buttonStyle = StyleSheet.create({
     title: {
       color: "white",
       textTransform: 'uppercase',
-      fontFamily: 'Inconsolata Medium',
+      fontFamily: 'Inter',
     },
   });
 

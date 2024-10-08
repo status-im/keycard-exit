@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   dialPadText: {
     color: "white",
-    fontFamily: 'Inconsolata Regular'
+    fontFamily: 'Inter'
   }
   });
 

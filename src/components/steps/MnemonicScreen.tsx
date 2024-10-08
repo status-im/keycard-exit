@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 30,
     fontSize: 28,
-    fontFamily: 'Inconsolata Medium',
+    fontFamily: 'Inter',
     color: "white",
     paddingBottom: 20
   },
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   mnemonic: {
     color: "white",
     textAlignVertical: 'bottom',
-    fontFamily: 'Inconsolata Regular',
+    fontFamily: 'Inter',
     fontSize: 16
   },
   btnContainer: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: "white",
-    fontFamily: 'Inconsolata Regular',
+    fontFamily: 'Inter',
     textAlign: 'center',
     paddingTop: '10%'
   }

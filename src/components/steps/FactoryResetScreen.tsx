@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
   heading: {
     textAlign: 'center',
     fontSize: 30,
-    fontFamily: 'Inconsolata Medium',
+    fontFamily: 'Inter',
     color: '#199515',
     marginTop: '50%'
   },
   prompt: {
     textAlign: 'center',
     fontSize: 18,
-    fontFamily: 'Inconsolata Regular',
+    fontFamily: 'Inter',
     color: 'white',
     marginTop: '5%'
   }

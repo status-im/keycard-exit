@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
-    fontFamily: 'Inconsolata Regular'
+    fontFamily: 'Inter'
   },
   btnContainer: {
     paddingTop: '7%'

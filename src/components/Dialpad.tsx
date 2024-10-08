@@ -70,19 +70,19 @@ const styles = StyleSheet.create({
   },
   pinText: {
     fontSize: 28,
-    fontFamily: 'Inconsolata Medium',
+    fontFamily: 'Inter',
     color: "white",
   },
   pinSubText: {
     fontSize: 18,
-    fontFamily: 'Inconsolata Regular',
+    fontFamily: 'Inter',
     color: "white",
     marginVertical: 30,
   },
 
   pinAttempts: {
     fontSize: 18,
-    fontFamily: 'Inconsolata Regular',
+    fontFamily: 'Inter',
     color: "white",
     marginTop: -10,
     marginBottom: 30
