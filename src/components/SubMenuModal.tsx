@@ -13,45 +13,44 @@ type SubMenuProps = {
 
 const SubMenuModal: FC<SubMenuProps> = props => {
   const {isVisible, onLogout, onFactoryReset, onChangeFunc} = props;
-
+  
   return (
     <Modal isVisible={isVisible} backdropOpacity={0} onBackdropPress={onChangeFunc} style={styles.container} animationIn={"bounceIn"} animationOut={"bounceOut"}>
-        <View style={styles.submenuContent}>
-            <TouchableOpacity onPress={onFactoryReset} style={styles.itemContainer}>
-                <Text style={styles.menuText}>Factory Reset</Text>
-            </TouchableOpacity>
-            <View style={{borderBottomColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth}}
-/>
-            <TouchableOpacity onPress={onLogout} style={styles.itemContainer}>
-                <Text style={styles.menuText}>Logout</Text>
-            </TouchableOpacity>
-        </View>
+      <View style={styles.submenuContent}>
+        <TouchableOpacity onPress={onFactoryReset} style={styles.itemContainer}>
+          <Text style={styles.menuText}>Factory Reset</Text>
+        </TouchableOpacity>
+      <View style={{borderBottomColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth}}/>
+      <TouchableOpacity onPress={onLogout} style={styles.itemContainer}>
+        <Text style={styles.menuText}>Logout</Text>
+      </TouchableOpacity>
+      </View>
     </Modal>
   )};
-
+  
   const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        top: '15%',
-        right: '2.5%',
-        margin: 0,
-        position: 'absolute',
-        backgroundColor: '#333333',
-        borderRadius: 5,
-      },
+      justifyContent: 'center',
+      top: '15%',
+      right: '2.5%',
+      margin: 0,
+      position: 'absolute',
+      backgroundColor: '#333333',
+      borderRadius: 5,
+    },
     submenuContent: {
-
+      
     },
     itemContainer: {
-        paddingVertical: 20,
-        paddingLeft: 20,
-        paddingRight: 80
+      paddingVertical: 20,
+      paddingLeft: 20,
+      paddingRight: 80
     },
     menuText: {
-        color: 'white',
-        fontFamily: 'Inter',
-        fontSize: 14
+      color: 'white',
+      fontFamily: 'Inter',
+      fontSize: 14
     }
   });
-
-export default SubMenuModal;
+  
+  export default SubMenuModal;
