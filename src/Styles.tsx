@@ -98,10 +98,10 @@ const Styles = StyleSheet.create({
       },
       navContainer: {
         flexDirection: 'row',
-        width: '95%',
-        marginLeft: '2.5%',
-        marginRight: '2.55%'
-      }
+        width: '90%',
+        marginLeft: '5%',
+        marginRight: '5%'
+      },
 });
 
 export default Styles

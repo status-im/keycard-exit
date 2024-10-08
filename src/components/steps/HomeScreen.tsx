@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../Button";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import { hexToBytes } from "@noble/hashes/utils";
@@ -8,6 +8,9 @@ import { ripemd160 } from "@noble/hashes/ripemd160";
 import { sha256 } from "@noble/hashes/sha256";
 import ReceiveModal from "../../ReceiveModal";
 import Dialpad from "../Dialpad";
+import Styles from "../../Styles";
+import Icon from 'react-native-vector-icons/Feather';
+import SubMenuModal from "../SubMenuModal";
 
 enum HomeSteps {
   Home,
@@ -21,12 +24,14 @@ type HomeScreenProps = {
   walletKey: string;
   onPressFunc: (sessionId: string, challenge: string, p?: string) => void;
   onCancelFunc: () => void;
+  onFactoryResetFunc: () => void;
 };
 
 const  HomeScreen: FC<HomeScreenProps> = props => {
-  const {pinRequired, pinRetryCounter, walletKey, onPressFunc, onCancelFunc} = props;
+  const {pinRequired, pinRetryCounter, walletKey, onPressFunc, onCancelFunc, onFactoryResetFunc} = props;
   const [step, setStep] = useState(HomeSteps.Home);
-  const [receiveVisible, setReceiveVisible] = useState(false)
+  const [receiveVisible, setReceiveVisible] = useState(false);
+  const [isMenuVisible, setMenuVisible] = useState<boolean>(false);
   const challengeRef = useRef("");
   const sessionRef = useRef("");
   
@@ -80,6 +85,10 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     return bech32.encode('bc', words);
   }
 
+  const openSubMenu = () => {
+    setMenuVisible(true);
+  }
+
   useEffect(() => {
     if (!hasPermission) {
       if (!requestPermission()) {
@@ -88,9 +97,14 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     }
   });
 
-  return <View style={styles.container}>
+  return <View style={Styles.container}>
     {step == HomeSteps.Home && 
     <View>
+      <View style={styles.homeTextContainer}>
+        <Text style={styles.homeHeading}>My Operators</Text>
+        <TouchableOpacity style={styles.subMenu} onPress={openSubMenu}><Icon name="more-horizontal" size={24} color="white" /></TouchableOpacity>
+      </View>
+      <SubMenuModal isVisible={isMenuVisible} onFactoryReset={onFactoryResetFunc} onLogout={onCancelFunc} onChangeFunc={() => {setMenuVisible(false)}}/>
       <Button label="Scan" disabled={false}  onChangeFunc={() => setStep(HomeSteps.ScanCode)}></Button>
       <Button label="Receive" disabled={false}  onChangeFunc={() => setReceiveVisible(true)}></Button>
       <Button label="Cancel" disabled={false}  onChangeFunc={onCancelFunc}></Button>
@@ -98,7 +112,7 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     </View>
     }
     {step == HomeSteps.ScanCode && 
-    <View style={styles.container}>
+    <View style={Styles.container}>
       <Camera style={StyleSheet.absoluteFill} device={cameraDevice!} isActive={true} codeScanner={codeScanner}/>
     </View>
     }
@@ -107,16 +121,27 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
+  homeTextContainer: {
+    paddingTop: 45,
+    flexDirection: 'row',
+    width: '95%',
+    marginLeft: '2.5%',
+    marginRight: '2.5%'
   },
-  heading: {
+  homeHeading: {
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: 28,
     fontFamily: 'Inter',
-    color: '#199515',
-    marginTop: '50%'
+    color: 'white',
+    lineHeight: 36,
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 'auto'
+  },
+  subMenu: {
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: 24
   },
   prompt: {
     textAlign: 'center',
