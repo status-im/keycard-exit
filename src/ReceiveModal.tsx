@@ -17,7 +17,7 @@ const ReceiveModal: FC<ReceiveModalProps> = props => {
     <Modal isVisible={isVisible} style={modalStyle.modalContainer}>
         <View style={modalStyle.container}>
           <QRCode value={address} />
-        <Button label="Cancel" disabled={false} btnColor="black" btnBorderColor="white" btnFontSize={13} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => onChangeFunc()} btnJustifyContent='center'></Button>
+        <Button label="Cancel" disabled={false} onChangeFunc={() => onChangeFunc()}></Button>
         </View>
     </Modal>
   )};

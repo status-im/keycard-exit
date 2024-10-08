@@ -1,6 +1,7 @@
 import {FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, Linking, Text, TouchableOpacity, View } from "react-native";
 import Button from "../Button";
+import Styles from "../../Styles";
 
 type DiscoveryScreenProps = {
   onPressFunc: () => void;
@@ -11,39 +12,24 @@ const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
   const {onPressFunc, onFactoryResetFunc} = props;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}> We are recruiting Operators to be the founders of a new, self-sovereign world in cyberspace</Text>
+    <View style={Styles.container}>
+      <View style={Styles.textContainer}>
+        <Text style={Styles.heading}>Welcome, Operator!</Text>
+        <Text style={Styles.subtitle}>Let's start by connecting your Multipass</Text>
       </View>
-      <View style={styles.btnContainer}>
-      <Button label="Connect" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
-      <Button label="Factory reset" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onFactoryResetFunc} btnJustifyContent='center'></Button>
+      <Image style={Styles.multipassImg} source={require('../../images/multipass.png')} />
+      <View style={Styles.footer}>
+        <Button label="Connect" disabled={false} onChangeFunc={onPressFunc}></Button>
+        <View style={Styles.sublinkContainer}>
+          <Text style={Styles.sublinkText}>Don’t have Multipass? Find out how to get one </Text>
+          <TouchableOpacity onPress={() => Linking.openURL('https://keycard.tech')}>
+            <Text style={Styles.sublinkAction}>here</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View>
     </View>
     </View>
   )};
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%'
-  },
-  headingContainer: {
-    width: '100%',
-    paddingLeft: '5.5%',
-    paddingRight: '5.5%',
-    paddingTop: '50%',
-  },
-  heading: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
-    fontFamily: 'Inter'
-  },
-  btnContainer: {
-    paddingTop: '7%'
-  }
-});
 
 export default DiscoveryScreen;

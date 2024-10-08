@@ -91,9 +91,9 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
   return <View style={styles.container}>
     {step == HomeSteps.Home && 
     <View>
-      <Button label="Scan" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setStep(HomeSteps.ScanCode)} btnJustifyContent='center'></Button>
-      <Button label="Receive" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setReceiveVisible(true)} btnJustifyContent='center'></Button>
-      <Button label="Cancel" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+      <Button label="Scan" disabled={false}  onChangeFunc={() => setStep(HomeSteps.ScanCode)}></Button>
+      <Button label="Receive" disabled={false}  onChangeFunc={() => setReceiveVisible(true)}></Button>
+      <Button label="Cancel" disabled={false}  onChangeFunc={onCancelFunc}></Button>
       <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={() => {setReceiveVisible(false)} } />
     </View>
     }

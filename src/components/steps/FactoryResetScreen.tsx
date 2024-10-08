@@ -16,8 +16,8 @@ const  FactoryResetScreen: FC<FactoryResetScreenProps> = props => {
       <View>
         <Text style={styles.heading}>Factory reset</Text>
         <Text style={styles.prompt}>This will remove the keys from your card. Are you sure?</Text>
-        <Button label="Next" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onPressFunc} btnJustifyContent='center'></Button>
-        <Button label="Cancel" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+        <Button label="Next" disabled={false} onChangeFunc={onPressFunc}></Button>
+        <Button label="Cancel" disabled={false} onChangeFunc={onCancelFunc}></Button>
         </View>
     </View>
   )};

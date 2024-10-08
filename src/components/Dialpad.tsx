@@ -51,8 +51,8 @@ const Dialpad: FC<DialpadProps> = props => {
        <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
      </View>
      <View style={styles.btnContainer}>
-     <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onCancelFunc} btnJustifyContent='flex-start'></Button>
-     <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={onNext} btnJustifyContent='flex-end'></Button>
+     <Button label="Cancel" disabled={false} onChangeFunc={onCancelFunc}></Button>
+     <Button label="Next" disabled={false} onChangeFunc={onNext}></Button>
      </View>
    </SafeAreaView>
   )};

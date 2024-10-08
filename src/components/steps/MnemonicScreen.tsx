@@ -66,9 +66,9 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
       { step == LoadMnemonicSteps.Home &&
       <View style={styles.container}>
         <Text style={styles.heading}> Load card</Text>
-        <Button label="Import using seed phrase" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} btnJustifyContent='center'></Button>
-        <Button label="Create a new wallet" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={generateMnemonic} btnJustifyContent='center'></Button>
-        <Button label="Cancel" disabled={false} btnColor="#199515" btnBorderColor="#199515" btnFontSize={17} btnBorderWidth={1} btnWidth="100%" onChangeFunc={onCancelFunc} btnJustifyContent='center'></Button>
+        <Button label="Import using seed phrase" disabled={false} onChangeFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)}></Button>
+        <Button label="Create a new wallet" disabled={false} onChangeFunc={generateMnemonic}></Button>
+        <Button label="Cancel" disabled={false}  onChangeFunc={onCancelFunc}></Button>
       </View>
       }
       { step == LoadMnemonicSteps.InsertMnemonic &&
@@ -78,8 +78,8 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
           <TextInput editable multiline onChangeText={(val) => setMnemonic(val)} value={mnemonic} style={styles.mnemonic} placeholder="Type your passphrase"/>
         </View>
         <View style={styles.btnContainer}>
-          <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => setStep(LoadMnemonicSteps.Home)} btnJustifyContent='flex-start'></Button>
-          <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => updateMnemonic(mnemonic)} btnJustifyContent='flex-end'></Button>
+          <Button label="Cancel" disabled={false} onChangeFunc={() => setStep(LoadMnemonicSteps.Home)}></Button>
+          <Button label="Next" disabled={false} onChangeFunc={() => updateMnemonic(mnemonic)}></Button>
         </View>
         <Text style={styles.errorMessage}>{errMessage}</Text>
         </View>
@@ -87,8 +87,8 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
       { step == LoadMnemonicSteps.CreateMnemonic &&
       <View style={styles.container}>
         <Text> {mnemonic}</Text>
-        <Button label="Cancel" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => setStep(LoadMnemonicSteps.Home)} btnJustifyContent='flex-start'></Button>
-        <Button label="Next" disabled={false} btnColor="white" btnBorderColor="white" btnBorderWidth={1} btnWidth="50%" onChangeFunc={() => submitMnemonic(mnemonic)} btnJustifyContent='flex-end'></Button>
+        <Button label="Cancel" disabled={false} onChangeFunc={() => setStep(LoadMnemonicSteps.Home)}></Button>
+        <Button label="Next" disabled={false} onChangeFunc={() => submitMnemonic(mnemonic)}></Button>
       </View>
       }
       { step == LoadMnemonicSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}

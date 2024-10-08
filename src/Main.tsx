@@ -14,6 +14,7 @@ import Keycard from "react-native-status-keycard";
 import Dialpad from './components/Dialpad';
 import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
+import Styles from './Styles';
 
 enum Step {
   Discovery,
@@ -277,7 +278,7 @@ const Main = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard} onFactoryResetFunc={startFactoryReset}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
@@ -288,14 +289,6 @@ const Main = () => {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#222222',
-    width: '100%',
-    height: '100%'
-  },
-});
 
 export default Main;
 
