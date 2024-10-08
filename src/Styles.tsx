@@ -95,6 +95,12 @@ const Styles = StyleSheet.create({
       },
       modalIcon: {
         color: '#F29AE9'
+      },
+      navContainer: {
+        flexDirection: 'row',
+        width: '95%',
+        marginLeft: '2.5%',
+        marginRight: '2.55%'
       }
 });
 

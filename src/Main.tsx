@@ -282,7 +282,7 @@ const Main = () => {
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
-      {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Choose PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
+      {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Enter PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>

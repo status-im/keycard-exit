@@ -6,12 +6,11 @@ type DialpadKeypadProps = {
   dialPadContent: any[];
   dialPadSize: number;
   dialPadTextSize: number;
-  code: number[];
   updateCodeFunc: (item: never) => void;
 };
 
 const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
-  const {dialPadContent, dialPadSize, dialPadTextSize, code, updateCodeFunc} = props;
+  const {dialPadContent, dialPadSize, dialPadTextSize, updateCodeFunc} = props;
 
   return (
     <FlatList data={dialPadContent} numColumns={3} keyExtractor={(_, index) => index.toString()} renderItem={({ item }) => {
@@ -19,7 +18,7 @@ const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
          <TouchableOpacity  disabled={item === ""} onPress={() => updateCodeFunc(item as never)}>
            <View style={[
                {
-                 borderWidth: item === "" ? 0 : 1,
+                 borderWidth: item === "" || item === "X" ? 0 : 1,
                  width: dialPadSize,
                  height: dialPadSize,
                },
@@ -46,10 +45,9 @@ const styles = StyleSheet.create({
   dialPadContainer: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 15,
-    borderRadius: 45,
+    margin: 8,
     padding: 0,
-    borderColor: "#199515",
+    borderColor: "white",
   },
   dialPadText: {
     color: "white",

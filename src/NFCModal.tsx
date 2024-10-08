@@ -21,7 +21,9 @@ const NFCModal: FC<NFCModalProps> = props => {
           <Icon name="smartphone" size={40} style={Styles.modalIcon}/>
           </View>
           <Text style={Styles.modalPrompt}>Tap your Keycard</Text>
-          <Button label="Cancel" disabled={false} onChangeFunc={() => onChangeFunc()}></Button>
+          <View style={Styles.navContainer}>
+            <Button label="Cancel" disabled={false} onChangeFunc={() => onChangeFunc()}></Button>
+          </View>
         </View>
     </Modal>
   )};

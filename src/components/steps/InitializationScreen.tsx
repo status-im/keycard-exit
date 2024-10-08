@@ -35,8 +35,8 @@ const  InitializationScreen: FC<InitializationScreenProps> = props => {
 
   return (
     <View>
-      { step == PinSteps.InsertPin && <Dialpad pinRetryCounter={-1} prompt={"Choose PIN"} onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
-      { step == PinSteps.RepeatPin && <Dialpad pinRetryCounter={-1} prompt={"Repeat PIN"} onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
+      { step == PinSteps.InsertPin && <Dialpad pinRetryCounter={-1} prompt={"Create PIN"} onCancelFunc={onCancelFunc} onNextFunc={insertPin}></Dialpad> }
+      { step == PinSteps.RepeatPin && <Dialpad pinRetryCounter={-1} prompt={"Confirm PIN"} onCancelFunc={() => setStep(PinSteps.InsertPin)} onNextFunc={submitPin}></Dialpad> }
     </View>
   )};
 

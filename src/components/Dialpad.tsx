@@ -3,6 +3,7 @@ import React, {FC,  useState } from "react";
 import DialpadKeypad from "./DialpadKeypad";
 import Button from "./Button";
 import DialpadPin from "./DialpadPin";
+import Styles from "../Styles";
 
  const { width } = Dimensions.get("window");
 
@@ -21,8 +22,7 @@ const Dialpad: FC<DialpadProps> = props => {
   const [code, setCode] = useState([]);
   const [wrongRepeat, setWrongRepeat] = useState(false);
   const pinLength = 6;
-  const pinContainerSize = width / 2;
-  const pinSize = (pinContainerSize / pinLength) + 8;
+  const pinSize = 14;
 
   const updateCode = (item: never) => {
     if (item === "X") {
@@ -41,59 +41,36 @@ const Dialpad: FC<DialpadProps> = props => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={Styles.container}>
      <View style={styles.textContainer}>
-       <Text style={styles.pinText}>{prompt}</Text>
-       <Text style={styles.pinSubText}>Enter your secure six-digit code</Text>
+       <Text style={Styles.heading}>{prompt}</Text>
        {pinRetryCounter >= 0 && <Text style={styles.pinAttempts}>Remaining attempts: {pinRetryCounter}</Text>}
        {wrongRepeat && <Text style={styles.pinAttempts}>The PINs do not match</Text>}
        <DialpadPin pinLength={pinLength} pinSize={pinSize} code={code} dialPadContent={dialPadContent} />
-       <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode} code={code}/>
+       <DialpadKeypad dialPadContent={dialPadContent} dialPadSize={dialPadSize} dialPadTextSize={dialPadTextSize} updateCodeFunc={updateCode}/>
      </View>
-     <View style={styles.btnContainer}>
-     <Button label="Cancel" disabled={false} onChangeFunc={onCancelFunc}></Button>
-     <Button label="Next" disabled={false} onChangeFunc={onNext}></Button>
+     <View style={Styles.footer}>
+      <View style={Styles.navContainer}>
+        <Button disabled={false} onChangeFunc={onCancelFunc} type="cancel"></Button>
+        <Button label="Continue" disabled={false} onChangeFunc={onNext}></Button>
+      </View>
      </View>
    </SafeAreaView>
   )};
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#222222",
-    height: '100%',
-  },
   textContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 60,
     position: "relative",
   },
-  pinText: {
-    fontSize: 28,
-    fontFamily: 'Inter',
-    color: "white",
-  },
-  pinSubText: {
-    fontSize: 18,
-    fontFamily: 'Inter',
-    color: "white",
-    marginVertical: 30,
-  },
-
   pinAttempts: {
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: 'Inter',
     color: "white",
-    marginTop: -10,
-    marginBottom: 30
-  },  
-  btnContainer: {
-    flexDirection: 'row',
-    width: '74%',
-    marginLeft: '13%',
-    marginRight: '13%',
-    alignItems: 'center'
+    marginTop: 10
   }
-  });
+});
 
 export default Dialpad;

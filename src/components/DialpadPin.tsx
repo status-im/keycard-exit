@@ -47,23 +47,24 @@ const  DialpadPin: FC<DialpadPinProps> = props => {
                height: pinSize,
                borderRadius: pinSize / 2,
                overflow: "hidden",
-               margin: 5,
+               margin: 8,
              }}
            >
              <View
                style={[
                  {
-                   borderColor: 'transparent',
-                   borderRadius: pinSize / 2
+                   borderColor: 'white',
+                   borderRadius: pinSize,
+                   borderWidth: 1
                  },
                  styles.pinContentContainer,
                ]}
              >
               {isSelected && (<Animated.View style={[
             {
-           width: pinSize * 0.28,
-           height: pinSize * 0.28,
-           borderRadius: pinSize * 0.35,
+           width: pinSize,
+           height: pinSize,
+           borderRadius: pinSize,
             },
             animatedStyle,
           styles.pinContent,
@@ -81,18 +82,18 @@ const  DialpadPin: FC<DialpadPinProps> = props => {
 const styles = StyleSheet.create({
   dialPadPinContainer: {
     flexDirection: "row",
-    marginBottom: 25,
+    marginTop: 30,
+    marginBottom: 50,
     alignItems: "flex-end",
   },
   pinContentContainer: {
     flex: 1,
-    backgroundColor: "#ffffff11",
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   pinContent: {
-    backgroundColor: "#199515",
+    backgroundColor: "white",
   }
   });
 
