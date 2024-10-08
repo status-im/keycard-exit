@@ -27,8 +27,6 @@ const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-    </View>
     </View>
   )};
 
