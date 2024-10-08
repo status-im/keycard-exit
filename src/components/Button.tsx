@@ -60,7 +60,7 @@ const style = StyleSheet.create({
       justifyContent: 'center'
     },
     primaryText: {
-      color: "black",
+      color: 'black',
       fontFamily: 'Inter',
       fontSize: 14,
     },
@@ -70,6 +70,7 @@ const style = StyleSheet.create({
       fontSize: 14
     },
     cancelIcon: {
+      color: 'white',
       textAlign: 'center'
     }
   });
