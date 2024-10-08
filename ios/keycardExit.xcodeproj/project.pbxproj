@@ -41,6 +41,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = keycardExit/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-keycardExit-keycardExitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-keycardExit-keycardExitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-keycardExit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-keycardExit.debug.xcconfig"; path = "Target Support Files/Pods-keycardExit/Pods-keycardExit.debug.xcconfig"; sourceTree = "<group>"; };
+		4172BED27DB8401BAF5AC8F6 /* Inter.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Inter.ttf; path = ../src/assets/fonts/Inter.ttf; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-keycardExit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-keycardExit.release.xcconfig"; path = "Target Support Files/Pods-keycardExit/Pods-keycardExit.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-keycardExit-keycardExitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-keycardExit-keycardExitTests.debug.xcconfig"; path = "Target Support Files/Pods-keycardExit-keycardExitTests/Pods-keycardExit-keycardExitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-keycardExit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-keycardExit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +50,6 @@
 		C0762F512C9C169400E82882 /* keycardExit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = keycardExit.entitlements; path = keycardExit/keycardExit.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F1DBBD5DD87F91495BD823DB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = keycardExit/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		4172BED27DB8401BAF5AC8F6 /* Inter.ttf */ = {isa = PBXFileReference; name = "Inter.ttf"; path = "../src/assets/fonts/Inter.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -5,11 +5,10 @@ import Styles from "../../Styles";
 
 type DiscoveryScreenProps = {
   onPressFunc: () => void;
-  onFactoryResetFunc: () => void;
 };
 
 const  DiscoveryScreen: FC<DiscoveryScreenProps> = props => {
-  const {onPressFunc, onFactoryResetFunc} = props;
+  const {onPressFunc} = props;
 
   return (
     <View style={Styles.container}>
