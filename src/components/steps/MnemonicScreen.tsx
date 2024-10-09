@@ -1,5 +1,5 @@
 import {FC, useState } from "react";
-import { Linking, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as bip39 from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import Button from "../Button";
@@ -97,7 +97,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
             <TextInput autoCapitalize="none" autoComplete="off" autoCorrect={false} secureTextEntry={!showMnemonic} multiline={showMnemonic} editable onChangeText={updateMnemonic} value={mnemonic} style={styles.mnemonic}/>
           </View>
         </View>
-        <View style={Styles.footer}>
+        <KeyboardAvoidingView keyboardVerticalOffset={20} behavior="padding" style={Styles.footer}>
           <View style={[Styles.sublinkContainer, {paddingBottom: 25}]}>
             <Text style={Styles.sublinkText}>By proceeding, you agree to these </Text>
             <TouchableOpacity onPress={() => Linking.openURL('https://logos.co')}>
@@ -108,7 +108,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
             <Button type="cancel" disabled={false} onChangeFunc={goBack}></Button>
             <Button label="Import" disabled={!isValid} onChangeFunc={submitMnemonic}></Button>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </View>
       }
       { step == LoadMnemonicSteps.CreateMnemonic &&
