@@ -14,6 +14,13 @@ const Styles = StyleSheet.create({
         width: '100%',
         paddingTop: 80,
       },
+      headingLarge: {
+        fontSize: 40,
+        lineHeight: 48,
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Inter',
+      },
       heading: {
         color: 'white',
         textAlign: 'center',
@@ -102,9 +109,8 @@ const Styles = StyleSheet.create({
       },
       navContainer: {
         flexDirection: 'row',
-        width: '90%',
+        width: '95%',
         marginLeft: '5%',
-        marginRight: '5%'
       },
 });
 

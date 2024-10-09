@@ -15,11 +15,13 @@ import Dialpad from './components/Dialpad';
 import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
 import Styles from './Styles';
+import SuccessScreen from './components/steps/SuccessScreen';
 
 enum Step {
   Discovery,
   Initialization,
   Loading,
+  LoadSuccess,
   Authentication,
   Home,
   FactoryReset,
@@ -119,7 +121,10 @@ const Main = () => {
           break;
         case Step.Loading:
           await Keycard.saveMnemonic(mnemonicRef.current, pinRef.current);
-          //fallthrough
+          walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
+          await AsyncStorage.setItem("wallet-key", walletKey.current);
+          setStep(Step.LoadSuccess)
+          break;
         case Step.Authentication:
           walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
           await AsyncStorage.setItem("wallet-key", walletKey.current);
@@ -277,11 +282,16 @@ const Main = () => {
     setIsModalVisible(false);
   }
 
+  const toHome = async () => {
+    setStep(Step.Home);
+  }
+
   return (
     <ImageBackground source={require("./images/gradient.png")} resizeMode='stretch' style={Styles.mainContainer}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
+      {step == Step.LoadSuccess && <SuccessScreen title="Congratulations!" message="You've successfully protected your wallet. Remember to keep your seed phrase safe, it's your responsibility!" onPressFunc={toHome}></SuccessScreen>}
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Enter PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel} onFactoryResetFunc={startFactoryReset}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
