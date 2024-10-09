@@ -61,7 +61,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   }
 
   const generateMnemonic = () => {
-    setIsValid(true);
+    setIsValid(false);
     const mn = bip39.generateMnemonic(wordlist, 128);
     shuffledWords.current = mn.split(' ');
     setMnemonic(mn);
@@ -79,6 +79,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
     verifyIndexes.current = [...Array(12).keys()];
     setCurrentIndex(0);
     shuffle(verifyIndexes.current);
+    verifyIndexes.current = verifyIndexes.current.slice(0, 3)
     setStep(LoadMnemonicSteps.ConfirmMnemonic);  
   }
 
@@ -106,12 +107,16 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   }
 
   const verifyWord = (selected: number) => {
-    if (shuffledWords[selected] == wordAt(currentIndex)) {
+    if (currentIndex >= 3) {
+      return;
+    }
+
+    if (shuffledWords.current[selected] == wordAt(verifyIndexes.current[currentIndex])) {
       if (currentIndex == 2) {
-        submitMnemonic();
-      } else {
-        setCurrentIndex(currentIndex + 1);
+        setIsValid(true);
       }
+
+      setCurrentIndex(currentIndex + 1);
     } else {
       resetConfirm();
     }
@@ -162,7 +167,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
           <View style={styles.currentStep}></View>
           <View style={styles.nextStep}></View>
         </View>
-        <Text style={[Styles.heading, {paddingTop: 25, paddingBottom: 30, width: '65%', marginHorizontal: '17.5%'}]}>Write Down Your Seed Phrase</Text>
+        <Text style={[Styles.heading, {paddingTop: 25, paddingBottom: 30, fontSize: 28, width: '65%', marginHorizontal: '17.5%'}]}>Write Down Your Seed Phrase</Text>
         <Text style={styles.createMnemonicText}>This is your seed phrase. Write it down on a paper and keep it in a safe place. You'll be asked to re-enter this phrase (in order) on the next step.</Text>
         <FlatList 
         data={shuffledWords.current} 
@@ -185,16 +190,51 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
       }
       { step == LoadMnemonicSteps.ConfirmMnemonic &&
       <View style={Styles.container}>
-        <Text> {mnemonic}</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingTop: 55}}>
+          <View style={styles.currentStep}></View>
+          <View style={styles.currentStep}></View>
+        </View>
+        <Text style={[Styles.heading, {paddingTop: 25, width: '90%', marginHorizontal: '5%', fontSize: 28}]}>Confirm Seed Phrase</Text>
+        <View style={styles.mnemonicSelectorList} >
+          <Text style={styles.mnemonicSelectorText}>Select each word in the order it was presented to you</Text>
+          <FlatList 
+          data={verifyIndexes.current} 
+          numColumns={3} 
+          renderItem={({ item, index }) => {
+            if (currentIndex <= index) {
+              return (
+              <View style={[styles.mnemonicSelectorContainer, {paddingVertical: 20}]}>
+                <Text style={styles.mnemonicSelectorWord}> {item + 1}</Text>
+              </View>)
+            } else {
+              return (
+              <View style={[styles.mnemonicSelectorContainer, {paddingVertical: 20, borderStyle: 'solid', backgroundColor: '#F29AE9'}]}>
+                <Text style={[styles.mnemonicSelectorWord, {color: '#320430'}]}> {wordAt(verifyIndexes.current[index])}</Text>
+              </View>)
+            }
+          }} />
+        </View>
+        <FlatList 
+        data={shuffledWords.current} 
+        numColumns={3} 
+        style={[styles.mnemonicList, {marginTop: 10}]} 
+        renderItem={({ item, index }) => 
+          <View style={[styles.mnemonicWordContainer, {paddingVertical: 20}]}>
+            <TouchableOpacity onPress={() => verifyWord(index)}>
+              <Text style={styles.mnemonicWord}> {item}</Text>
+            </TouchableOpacity>
+          </View>
+      }
+        />
         <View style={Styles.footer}>
           <View style={Styles.navContainer}>
             <Button type="cancel" disabled={false} onChangeFunc={resetConfirm}></Button>
-            <Button label="Next" disabled={false} onChangeFunc={submitMnemonic}></Button>
+            <Button label="Continue" disabled={!isValid} onChangeFunc={submitMnemonic}></Button>
           </View>
         </View>
       </View>
       }
-      { step == LoadMnemonicSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.InsertMnemonic)} onNextFunc={submitPin}></Dialpad>}
+      { step == LoadMnemonicSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(LoadMnemonicSteps.Home)} onNextFunc={submitPin}></Dialpad>}
     </View>
   )};
 
@@ -292,6 +332,39 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 5,
     marginHorizontal: 2
+  },
+  mnemonicSelectorList: {
+    width: '95%',
+    marginHorizontal: '2.5%',
+    backgroundColor: '#320430',
+    paddingHorizontal: '7%',
+    paddingVertical: 15,
+    marginTop: 15,
+    marginBottom: 20
+  },
+  mnemonicSelectorContainer: {
+    width: '30%',
+    textAlign: 'center',
+    borderWidth: .7,
+    borderColor: '#F29AE9',
+    borderStyle: 'dashed',
+    margin: '1.65%'
+  },
+  mnemonicSelectorText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#F29AE9',
+    width: '80%',
+    marginHorizontal: '10%',
+    textAlign: 'center',
+    paddingBottom: 15
+  },
+  mnemonicSelectorWord: {
+    textAlign: 'center',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#F29AE9'
   }
 });
 
