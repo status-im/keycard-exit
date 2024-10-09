@@ -1,8 +1,12 @@
 import { StyleSheet } from "react-native";
 
 const Styles = StyleSheet.create({
-    container: {
+      mainContainer: {
         backgroundColor: 'black',
+        width: '100%',
+        height: '100%'
+      },
+      container: {
         width: '100%',
         height: '100%'
       },

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StyleSheet, NativeEventEmitter } from 'react-native';
+import { SafeAreaView, StyleSheet, NativeEventEmitter, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import DiscoveryScreen from './components/steps/DiscoveryScreen';
@@ -278,7 +278,7 @@ const Main = () => {
   }
 
   return (
-    <SafeAreaView style={Styles.container}>
+    <ImageBackground source={require("./images/gradient.png")} resizeMode='stretch' style={Styles.mainContainer}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
       {step == Step.Initialization && <InitializationScreen onPressFunc={initPin} onCancelFunc={cancel}></InitializationScreen>}
       {step == Step.Loading && <MnemonicScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} onPressFunc={loadMnemonic} onCancelFunc={cancel}></MnemonicScreen>}
@@ -286,7 +286,7 @@ const Main = () => {
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel} onFactoryResetFunc={startFactoryReset}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
-    </SafeAreaView>
+    </ImageBackground>
   );
 }
 

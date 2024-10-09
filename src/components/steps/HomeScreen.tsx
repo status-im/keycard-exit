@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Button from "../Button";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import { hexToBytes } from "@noble/hashes/utils";
