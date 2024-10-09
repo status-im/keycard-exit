@@ -29,6 +29,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   const [isValid, setIsValid] = useState(false);
   const [step, setStep] = useState(LoadMnemonicSteps.Home);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedWords, setSelectedWords] = useState(Array(12).fill(false) as boolean[])
   const shuffledWords = useRef([] as string[]);
   const verifyIndexes = useRef([] as number[]);
 
@@ -75,6 +76,7 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
   }
 
   const confirmMnemonic = () => {
+    setSelectedWords(Array(12).fill(false));
     shuffle(shuffledWords.current);
     verifyIndexes.current = [...Array(12).keys()];
     setCurrentIndex(0);
@@ -112,6 +114,10 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
     }
 
     if (shuffledWords.current[selected] == wordAt(verifyIndexes.current[currentIndex])) {
+      var tmp = [...selectedWords];
+      tmp[selected] = true;
+      setSelectedWords(tmp);
+
       if (currentIndex == 2) {
         setIsValid(true);
       }
@@ -219,9 +225,9 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         numColumns={3} 
         style={[styles.mnemonicList, {marginTop: 10}]} 
         renderItem={({ item, index }) => 
-          <View style={[styles.mnemonicWordContainer, {paddingVertical: 20}]}>
+          <View style={[styles.mnemonicWordContainer, selectedWords[index] ? {backgroundColor: 'white'} : {}, {paddingVertical: 20}]}>
             <TouchableOpacity onPress={() => verifyWord(index)}>
-              <Text style={styles.mnemonicWord}> {item}</Text>
+              <Text style={[styles.mnemonicWord, selectedWords[index] ? {color: 'black'} : {}]}> {item}</Text>
             </TouchableOpacity>
           </View>
       }
