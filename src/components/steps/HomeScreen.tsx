@@ -9,7 +9,7 @@ import { sha256 } from "@noble/hashes/sha256";
 import ReceiveModal from "../../ReceiveModal";
 import Dialpad from "../Dialpad";
 import Styles from "../../Styles";
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SubMenuModal from "../SubMenuModal";
 
 enum HomeSteps {
@@ -102,12 +102,11 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     <View>
       <View style={styles.homeTextContainer}>
         <Text style={styles.homeHeading}>My Operators</Text>
-        <TouchableOpacity style={styles.subMenu} onPress={openSubMenu}><Icon name="more-horizontal" size={24} color="white" /></TouchableOpacity>
+        <TouchableOpacity style={styles.subMenu} onPress={openSubMenu}><Icon name="dots-horizontal" size={24} color="white" /></TouchableOpacity>
       </View>
       <SubMenuModal isVisible={isMenuVisible} onFactoryReset={onFactoryResetFunc} onLogout={onCancelFunc} onChangeFunc={() => {setMenuVisible(false)}}/>
       <Button label="Scan" disabled={false}  onChangeFunc={() => setStep(HomeSteps.ScanCode)}></Button>
       <Button label="Receive" disabled={false}  onChangeFunc={() => setReceiveVisible(true)}></Button>
-      <Button label="Cancel" disabled={false}  onChangeFunc={onCancelFunc}></Button>
       <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={() => {setReceiveVisible(false)} } />
     </View>
     }
@@ -122,11 +121,11 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
 
 const styles = StyleSheet.create({
   homeTextContainer: {
-    paddingTop: 45,
+    paddingVertical: 40,
     flexDirection: 'row',
     width: '95%',
     marginLeft: '2.5%',
-    marginRight: '2.5%'
+    marginRight: '2.5%',
   },
   homeHeading: {
     textAlign: 'center',
@@ -141,7 +140,8 @@ const styles = StyleSheet.create({
   subMenu: {
     flexGrow: 0,
     flexShrink: 1,
-    flexBasis: 24
+    flexBasis: 24,
+    justifyContent: 'center'
   },
   prompt: {
     textAlign: 'center',

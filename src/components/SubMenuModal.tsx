@@ -1,8 +1,6 @@
 import React, {FC} from "react";
 import {StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal/dist/modal";
-import Styles from "../Styles";
-import Button from "./Button";
 
 type SubMenuProps = {
   isVisible: boolean;

@@ -1,6 +1,6 @@
 import {FC } from "react";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type DialpadKeypadProps = {
   dialPadContent: any[];
@@ -26,7 +26,7 @@ const  DialpadKeypad: FC<DialpadKeypadProps> = props => {
              ]}
            >
              {item === "X" ? (
-               <Icon name="delete" size={24} color="white" />
+               <Icon name="backspace-outline" size={24} color="white" />
              ) : (
                <Text
                  style={[{ fontSize: dialPadTextSize }, styles.dialPadText]}
