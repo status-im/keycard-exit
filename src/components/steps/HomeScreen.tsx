@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState } from "react";
+import React, {FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import { hexToBytes } from "@noble/hashes/utils";
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SubMenuModal from "../SubMenuModal";
 import IconButton from "../IconButton";
 import Clipboard from "@react-native-clipboard/clipboard";
+import Svg, { Circle, Defs, Mask, Rect } from "react-native-svg";
 
 enum HomeSteps {
   Home,
@@ -95,6 +96,10 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     setReceiveVisible(false);    
   }
 
+  const closeCamera = () => {
+    setStep(HomeSteps.Home);
+  }
+
   useEffect(() => {
     if (!hasPermission) {
       if (!requestPermission()) {
@@ -123,8 +128,27 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     </View>
     }
     {step == HomeSteps.ScanCode && 
-    <View style={Styles.container}>
-      <Camera style={StyleSheet.absoluteFill} device={cameraDevice!} isActive={true} codeScanner={codeScanner}/>
+    <View style={styles.cameraContainer}>
+      <Camera style={StyleSheet.absoluteFill} device={cameraDevice!} isActive={true} codeScanner={codeScanner} photoQualityBalance="speed" />
+      <View style={styles.qrBoxContainer}>
+        <Svg height="100%" width="100%" viewBox="0 0 100 100">
+              <Defs>
+                  <Mask id="mask" x="0" y="0" height="100%" width="100%">
+                      <Rect height="100%" width="100%" fill="#fff" />
+                      <Rect width="35%" height="35%" x="7.5%" y="32.5%" />
+                  </Mask>
+              </Defs>
+              <Rect height="100%" width="100%" fill="rgba(0, 0, 0, 0.5)" mask="url(#mask)" fill-opacity="0" />
+              <Rect width="35%" height="35%" x="7.5%" y="32.5%" fill="rgba(0, 0, 0, 0)" strokeWidth="0.5" stroke="white" strokeDasharray="10,15,10,0" strokeLinecap="round"/>
+          </Svg>
+      </View>
+      <View style={styles.qrTextContainer}>
+        <Text style={styles.qrHeading}>Scan a QR</Text>
+        <Text style={[Styles.sublinkText, {textAlign: 'center'}]}>Hold the code inside the frame, it will be scanned automatically</Text>
+      </View>
+      <TouchableOpacity style={styles.backButton} onPress={closeCamera}>
+        <Icon name="close-circle" color="white" size={40} />
+      </TouchableOpacity>
     </View>
     }
     {step == HomeSteps.InsertPin && <Dialpad pinRetryCounter={pinRetryCounter} prompt={"Enter PIN"} onCancelFunc={() => setStep(HomeSteps.Home)} onNextFunc={submitPin}></Dialpad>}
@@ -132,6 +156,10 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
 };
 
 const styles = StyleSheet.create({
+  cameraContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
   homeTextContainer: {
     paddingVertical: 40,
     flexDirection: 'row',
@@ -167,6 +195,34 @@ const styles = StyleSheet.create({
     width: '95%',
     marginHorizontal: '2.5%'
   },
+  backButton: {
+    position: 'absolute',
+    right: 15,
+    top: 60,
+    zIndex: 1
+  },
+  qrBoxContainer: {
+    aspectRatio: 1,
+    height: "100%",
+    width: "100%"
+  },
+  qrTextContainer: {
+    position: 'absolute', 
+    zIndex: 0, 
+    width: '70%', 
+    height: 200, 
+    paddingTop: '20%',
+    alignItems: 'center',
+    marginHorizontal: '15%'
+  },
+  qrHeading: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    lineHeight: 28,
+    color: 'white',
+    textAlign: 'center',
+    paddingBottom: 15
+  }
 });
 
 export default HomeScreen;
