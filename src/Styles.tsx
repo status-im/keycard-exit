@@ -49,7 +49,7 @@ const Styles = StyleSheet.create({
       footer: {
         width: '100%',
         position: 'absolute',
-        bottom: 60,
+        bottom: 40,
         justifyContent: 'center'
       },
       sublinkContainer: {
