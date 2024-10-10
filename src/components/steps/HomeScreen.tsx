@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import { hexToBytes } from "@noble/hashes/utils";
 import { bech32 } from "bech32";
@@ -67,6 +67,8 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     }
   });
 
+  const screenSize = Dimensions.get("window");
+
   const submitPin = (p: string) => {
     onPressFunc(sessionRef.current, challengeRef.current, p);
     return true;
@@ -131,15 +133,15 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     <View style={styles.cameraContainer}>
       <Camera style={StyleSheet.absoluteFill} device={cameraDevice!} isActive={true} codeScanner={codeScanner} photoQualityBalance="speed" />
       <View style={styles.qrBoxContainer}>
-        <Svg height="100%" width="100%" viewBox="0 0 100 100">
+        <Svg>
               <Defs>
                   <Mask id="mask" x="0" y="0" height="100%" width="100%">
                       <Rect height="100%" width="100%" fill="#fff" />
-                      <Rect width="35%" height="35%" x="7.5%" y="32.5%" />
+                      <Rect width="240" height="240" x={(screenSize.width - 240)/2} y={(screenSize.height - 240)/2} />
                   </Mask>
               </Defs>
               <Rect height="100%" width="100%" fill="rgba(0, 0, 0, 0.5)" mask="url(#mask)" fill-opacity="0" />
-              <Rect width="35%" height="35%" x="7.5%" y="32.5%" fill="rgba(0, 0, 0, 0)" strokeWidth="0.5" stroke="white" strokeDasharray="10,15,10,0" strokeLinecap="round"/>
+              <Rect width="240" height="240" x={(screenSize.width - 240)/2} y={(screenSize.height - 240)/2} fill="rgba(0, 0, 0, 0)" strokeWidth="3" stroke="white" strokeDasharray="60,120,60,0" strokeLinecap="round"/>
           </Svg>
       </View>
       <View style={styles.qrTextContainer}>
@@ -202,9 +204,7 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   qrBoxContainer: {
-    aspectRatio: 1,
-    height: "100%",
-    width: "100%"
+    height: "100%"
   },
   qrTextContainer: {
     position: 'absolute', 
