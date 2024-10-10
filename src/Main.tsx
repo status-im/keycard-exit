@@ -273,6 +273,14 @@ const Main = () => {
     setStep(Step.Discovery);
   }
 
+  const cancelFactoryReset = () => {
+    if (walletKey.current) {
+      setStep(Step.Home);
+    } else {
+      setStep(Step.Discovery);
+    }
+  }
+
   const pinDisplayCounter = () => {
     return pinCounter == PIN_MAX_RETRY ? -1 : pinCounter;
   }
@@ -294,7 +302,7 @@ const Main = () => {
       {step == Step.LoadSuccess && <InfoScreen icon="check-circle" title="Congratulations!" message="You've successfully protected your wallet. Remember to keep your seed phrase safe, it's your responsibility!" onPressFunc={toHome}></InfoScreen>}
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Enter PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel} onFactoryResetFunc={startFactoryReset}></HomeScreen>}
-      {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancel}></FactoryResetScreen>}
+      {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancelFactoryReset}></FactoryResetScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </ImageBackground>
   );
