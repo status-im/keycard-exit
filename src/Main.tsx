@@ -6,7 +6,6 @@ import DiscoveryScreen from './components/steps/DiscoveryScreen';
 import InitializationScreen from './components/steps/InitializationScreen';
 import MnemonicScreen from './components/steps/MnemonicScreen';
 import HomeScreen from './components/steps/HomeScreen';
-import FactoryResetScreen from './components/steps/FactoryResetScreen';
 import NFCModal from './NFCModal';
 
 //@ts-ignore
