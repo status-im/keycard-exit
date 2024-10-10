@@ -138,6 +138,8 @@ const Main = () => {
           break;
         case Step.FactoryReset:
           await Keycard.factoryReset();
+          walletKey.current = "";
+          AsyncStorage.removeItem("wallet-key");
           setStep(Step.Discovery);
           break;
         default:
