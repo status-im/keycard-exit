@@ -1,23 +1,33 @@
 import React, {FC} from "react";
 import {StyleSheet, View } from "react-native";
 import Modal from "react-native-modal/dist/modal";
-import Button from "./components/Button";
 import QRCode from "react-qr-code";
+import Styles from "./Styles";
+import IconButton from "./components/IconButton";
 
 type ReceiveModalProps = {
   address: string;
   isVisible: boolean;
   onChangeFunc: () => void;
+  onCancelFunc: () => void;
 };
 
 const ReceiveModal: FC<ReceiveModalProps> = props => {
-  const {address, isVisible, onChangeFunc} = props;
+  const {address, isVisible, onChangeFunc, onCancelFunc} = props;
+
+  const addressLabel = () => {
+    return address.substring(0, 5) + "\u2026" + address.substring(address.length - 5);
+  }
 
   return (
-    <Modal isVisible={isVisible} style={modalStyle.modalContainer}>
+    <Modal isVisible={isVisible} style={modalStyle.modalContainer} onBackdropPress={onCancelFunc}>
         <View style={modalStyle.container}>
-          <QRCode value={address} />
-        <Button label="Cancel" disabled={false} onChangeFunc={() => onChangeFunc()}></Button>
+          <View>
+           <QRCode value={address} size={220} bgColor="#320430" fgColor="#F29AE9" />
+          </View>
+          <View style={Styles.footer}>
+            <IconButton label={addressLabel()} disabled={false} onChangeFunc={onChangeFunc} rotate="0deg" backgroundColor="white" labelColor="black" icon="content-copy"/>
+          </View>
         </View>
     </Modal>
   )};
@@ -28,13 +38,13 @@ const modalStyle = StyleSheet.create({
     margin: 0,
   },
   container: {
-    height: 350,
+    height: 420,
     padding: 40,
     alignItems: 'center',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-    backgroundColor: 'white'
+    backgroundColor: '#320430'
   },
   header: {
     paddingTop: '7%',

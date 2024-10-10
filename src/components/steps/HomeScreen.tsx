@@ -1,6 +1,5 @@
 import {FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Button from "../Button";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import { hexToBytes } from "@noble/hashes/utils";
 import { bech32 } from "bech32";
@@ -12,6 +11,7 @@ import Styles from "../../Styles";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SubMenuModal from "../SubMenuModal";
 import IconButton from "../IconButton";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 enum HomeSteps {
   Home,
@@ -90,6 +90,11 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
     setMenuVisible(true);
   }
 
+  const copyAddressAndClose = () => {
+    Clipboard.setString(walletAddress());
+    setReceiveVisible(false);    
+  }
+
   useEffect(() => {
     if (!hasPermission) {
       if (!requestPermission()) {
@@ -114,7 +119,7 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
           <IconButton label="Scan" disabled={false} rotate="0deg" backgroundColor="#321504" labelColor="#FE740C" icon="line-scan" onChangeFunc={() => setStep(HomeSteps.ScanCode)}/> 
         </View>
         </View>
-      <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={() => {setReceiveVisible(false)} } />
+      <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={copyAddressAndClose} onCancelFunc={() => setReceiveVisible(false)}/>
     </View>
     }
     {step == HomeSteps.ScanCode && 
