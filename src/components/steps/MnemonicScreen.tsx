@@ -225,12 +225,10 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
         numColumns={3} 
         style={[styles.mnemonicList, {marginTop: 10}]} 
         renderItem={({ item, index }) => 
-          <View style={[styles.mnemonicWordContainer, selectedWords[index] ? {backgroundColor: 'white'} : {}, {paddingVertical: 20}]}>
-            <TouchableOpacity onPress={() => verifyWord(index)}>
-              <Text style={[styles.mnemonicWord, selectedWords[index] ? {color: 'black'} : {}]}> {item}</Text>
-            </TouchableOpacity>
-          </View>
-      }
+          <TouchableOpacity onPress={() => verifyWord(index)} style={[styles.mnemonicWordContainer, selectedWords[index] ? {backgroundColor: 'white'} : {}, {paddingVertical: 20}]}>
+            <Text style={[styles.mnemonicWord, selectedWords[index] ? {color: 'black'} : {}]}> {item}</Text>
+          </TouchableOpacity>
+        }
         />
         <View style={Styles.footer}>
           <View style={Styles.navContainer}>
