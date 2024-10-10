@@ -24,6 +24,8 @@ enum Step {
   LoadSuccess,
   Authentication,
   Home,
+  LoginSuccess,
+  LoginError,
   FactoryReset,
 }
 
@@ -35,6 +37,7 @@ const Main = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [step, setStep] = useState(Step.Discovery);
   const [pinCounter, setPinCounter] = useState(PIN_MAX_RETRY);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const didMount = useRef(false);
   const stepRef = useRef(step);
@@ -178,12 +181,14 @@ const Main = () => {
 
         const respJson = await resp.json();
         if (respJson['error']) {
-          //TODO: handle error
+          setErrorMessage(respJson['error']);
+          setStep(Step.LoginError);
         }
 
-        //TODO: handle success
+        setStep(Step.LoginSuccess)
       } catch (e) {
-        //TODO: handle error
+        setErrorMessage("Login failed. Please try again.");
+        setStep(Step.LoginError);
       }
     }
   }
@@ -303,6 +308,8 @@ const Main = () => {
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Enter PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel} onFactoryResetFunc={startFactoryReset}></HomeScreen>}
       {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancelFactoryReset}></FactoryResetScreen>}
+      {step == Step.LoginSuccess && <InfoScreen icon="check-circle" title="Success!" message="Login successful. You can now proceed to the Operator Dashboard in your browser" onPressFunc={toHome}></InfoScreen>}
+      {step == Step.LoginError && <InfoScreen icon="alert-circle" title="Error" message={errorMessage} onPressFunc={toHome}></InfoScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </ImageBackground>
   );
