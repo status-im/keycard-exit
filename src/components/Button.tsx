@@ -23,13 +23,13 @@ const  Button: FC<ButtonProps> = props => {
   }
 
   return (
-    <View style={[textContainer(), disabled ? style.disabledBtn : null]}>
-      <TouchableOpacity key={label} disabled={disabled} style={style.button} onPress={onChangeFunc}>
-        {type == "cancel" && <Icon name="chevron-left" size={16} style={style.cancelIcon}/>}
-        {type == "primary" && <Text style={style.primaryText}>{label}</Text>}
-        {type == "secondary" && <Text style={style.secondaryText}>{label}</Text>}
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity key={label} disabled={disabled} onPress={onChangeFunc} style={[textContainer(), disabled ? style.disabledBtn : null]}>
+      <View style={style.button}>
+          {type == "cancel" && <Icon name="chevron-left" size={16} style={style.cancelIcon}/>}
+          {type == "primary" && <Text style={style.primaryText}>{label}</Text>}
+          {type == "secondary" && <Text style={style.secondaryText}>{label}</Text>}
+      </View>
+    </TouchableOpacity>
   )};
 
 const style = StyleSheet.create({
