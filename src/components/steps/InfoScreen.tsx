@@ -9,10 +9,11 @@ type InfoScreenProps = {
   title: string;
   message: string;
   onPressFunc: () => void;
+  onCancelFunc?: () => void;
 };
 
 const InfoScreen: FC<InfoScreenProps> = props => {
-  const {icon, title, message, onPressFunc} = props;
+  const {icon, title, message, onPressFunc, onCancelFunc} = props;
 
   return (
     <View style={Styles.container}>
@@ -27,7 +28,10 @@ const InfoScreen: FC<InfoScreenProps> = props => {
         </View>
       </View>
       <View style={Styles.footer}>
-        <Button label="Continue" disabled={false} onChangeFunc={onPressFunc}></Button>
+        <View style={onCancelFunc ? Styles.navContainer : {}}>
+          {onCancelFunc && <Button type="cancel" disabled={false} onChangeFunc={onCancelFunc}></Button>}
+          <Button label="Continue" disabled={false} onChangeFunc={onPressFunc}></Button>
+        </View>
       </View>
         
     </View>

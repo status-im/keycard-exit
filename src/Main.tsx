@@ -301,6 +301,14 @@ const Main = () => {
     setStep(Step.Home);
   }
 
+  const factoryResetMessage = () => {
+    if (pinCounter) {
+      return "This will remove all keys from this card and completely reset it. Do you want to proceed?";
+    } else {
+      return "This card is blocked. You can only continue using it by performing a factory reset. Factory reset will remove all keys and reset the card.";
+    }
+  }
+
   return (
     <ImageBackground source={require("./images/gradient.png")} resizeMode='stretch' style={Styles.mainContainer}>
       {step == Step.Discovery && <DiscoveryScreen onPressFunc={connectCard}></DiscoveryScreen>}
@@ -309,9 +317,9 @@ const Main = () => {
       {step == Step.LoadSuccess && <InfoScreen icon="check-circle" title="Congratulations!" message="You've successfully protected your wallet. Remember to keep your seed phrase safe, it's your responsibility!" onPressFunc={toHome}></InfoScreen>}
       {step == Step.Authentication && <Dialpad pinRetryCounter={pinDisplayCounter()} prompt={"Enter PIN"} onCancelFunc={cancel} onNextFunc={authenticate}></Dialpad>}
       {step == Step.Home && <HomeScreen pinRequired={pinRef.current ? false : true} pinRetryCounter={pinDisplayCounter()} walletKey={walletKey.current} onPressFunc={login} onCancelFunc={cancel} onFactoryResetFunc={startFactoryReset}></HomeScreen>}
-      {step == Step.FactoryReset && <FactoryResetScreen pinRetryCounter={pinDisplayCounter()} onPressFunc={connectCard} onCancelFunc={cancelFactoryReset}></FactoryResetScreen>}
+      {step == Step.FactoryReset && <InfoScreen icon="alert-circle" title="Factory Reset" message={factoryResetMessage()} onPressFunc={connectCard} onCancelFunc={cancelFactoryReset}></InfoScreen>}
       {step == Step.LoginSuccess && <InfoScreen icon="check-circle" title="Success!" message="Login successful. You can now proceed to the Operator Dashboard in your browser" onPressFunc={toHome}></InfoScreen>}
-      {step == Step.LoginError && <InfoScreen icon="alert-circle" title="Error" message={errorMessage} onPressFunc={toHome}></InfoScreen>}
+      {step == Step.LoginError && <InfoScreen icon="close-circle" title="Error" message={errorMessage} onPressFunc={toHome}></InfoScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </ImageBackground>
   );
