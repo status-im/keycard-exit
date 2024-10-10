@@ -22,7 +22,7 @@ const ReceiveModal: FC<ReceiveModalProps> = props => {
   return (
     <Modal isVisible={isVisible} style={modalStyle.modalContainer} onBackdropPress={onCancelFunc}>
         <View style={modalStyle.container}>
-          <View>
+          <View style={{paddingTop: 10}}>
            <QRCode value={address} size={220} bgColor="#320430" fgColor="#F29AE9" />
           </View>
           <View style={Styles.footer}>
