@@ -11,6 +11,7 @@ import Dialpad from "../Dialpad";
 import Styles from "../../Styles";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SubMenuModal from "../SubMenuModal";
+import IconButton from "../IconButton";
 
 enum HomeSteps {
   Home,
@@ -105,8 +106,14 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
         <TouchableOpacity style={styles.subMenu} onPress={openSubMenu}><Icon name="dots-horizontal" size={24} color="white" /></TouchableOpacity>
       </View>
       <SubMenuModal isVisible={isMenuVisible} onFactoryReset={onFactoryResetFunc} onLogout={onCancelFunc} onChangeFunc={() => {setMenuVisible(false)}}/>
-      <Button label="Scan" disabled={false}  onChangeFunc={() => setStep(HomeSteps.ScanCode)}></Button>
-      <Button label="Receive" disabled={false}  onChangeFunc={() => setReceiveVisible(true)}></Button>
+      <View style={styles.homeScreenBtns}>
+        <View style={{width: '50%'}}>
+          <IconButton label="Receive" disabled={false} rotate="90deg" backgroundColor="#320430" labelColor="#F29AE9" icon="page-last" onChangeFunc={() => setReceiveVisible(true)} />
+        </View>
+        <View style={{width: '50%'}}>
+          <IconButton label="Scan" disabled={false} rotate="0deg" backgroundColor="#321504" labelColor="#FE740C" icon="line-scan" onChangeFunc={() => setStep(HomeSteps.ScanCode)}/> 
+        </View>
+        </View>
       <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={() => {setReceiveVisible(false)} } />
     </View>
     }
@@ -149,7 +156,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     color: 'white',
     marginTop: '5%'
-  }
+  },
+  homeScreenBtns: {
+    flexDirection: 'row',
+    width: '95%',
+    marginHorizontal: '2.5%'
+  },
 });
 
 export default HomeScreen;
