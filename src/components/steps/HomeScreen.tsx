@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   homeTextContainer: {
-    paddingVertical: 40,
+    paddingVertical: 60,
     flexDirection: 'row',
     width: '95%',
     marginLeft: '2.5%',
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     zIndex: 0, 
     width: '70%', 
     height: 200, 
-    paddingTop: '20%',
+    paddingTop: '32%',
     alignItems: 'center',
     marginHorizontal: '15%'
   },
