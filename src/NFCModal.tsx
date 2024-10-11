@@ -18,7 +18,7 @@ const NFCModal: FC<NFCModalProps> = props => {
         <View style={Styles.modalContent}>
           <Text style={Styles.modalHeader}>Ready to Scan</Text>
           <View style={Styles.modalIconContainer}>
-          <Icon name="nfc-tap" size={40} style={Styles.modalIcon}/>
+            <Icon name="nfc-tap" size={40} style={Styles.modalIcon}/>
           </View>
           <Text style={Styles.modalPrompt}>Tap your Keycard</Text>
           <View style={Styles.footer}>

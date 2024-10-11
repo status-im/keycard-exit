@@ -86,13 +86,15 @@ const Styles = StyleSheet.create({
       modalHeader: {
         paddingTop: '7%',
         fontSize: 20,
-        fontFamily: 'Inter'
+        fontFamily: 'Inter',
+        color: 'white'
       },
       modalPrompt: {
         paddingTop: '10%',
         fontSize: 16,
         fontFamily: 'Inter',
-        paddingBottom: 30
+        paddingBottom: 30,
+        color: 'white'
       },
       modalIconContainer: {
         width: 80,
