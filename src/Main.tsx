@@ -26,6 +26,7 @@ enum Step {
   LoginSuccess,
   LoginError,
   FactoryReset,
+  NotAuthentic,
 }
 
 const Main = () => {
@@ -103,6 +104,12 @@ const Main = () => {
 
       if (appInfo["pin-retry-counter"] !== null) {
         newPinCounter = appInfo["pin-retry-counter"];
+      }
+
+      if (appInfo["authentic?"] === false) {
+        setStep(Step.NotAuthentic);
+        await stopNFC(); 
+        return;
       }
 
       switch (stepRef.current) {
@@ -208,6 +215,7 @@ const Main = () => {
 
       const loadData = async () => {
         await Keycard.setPairings(await getPairings());
+        await Keycard.setCertificationAuthorities(["029ab99ee1e7a71bdf45b3f9c58c99866ff1294d2c1e304e228a86e10c3343501c"]);
         const tmp = await AsyncStorage.getItem("wallet-key");
         walletKey.current = tmp !== null ? tmp : "";
 
@@ -319,6 +327,7 @@ const Main = () => {
       {step == Step.FactoryReset && <InfoScreen icon="alert-circle" title="Factory Reset" message={factoryResetMessage()} onPressFunc={connectCard} onCancelFunc={cancelFactoryReset}></InfoScreen>}
       {step == Step.LoginSuccess && <InfoScreen icon="check-circle" title="Success!" message="Login successful. You can now proceed to the Operator Dashboard in your browser" onPressFunc={toHome}></InfoScreen>}
       {step == Step.LoginError && <InfoScreen icon="close-circle" title="Error" message={errorMessage} onPressFunc={toHome}></InfoScreen>}
+      {step == Step.NotAuthentic && <InfoScreen icon="close-circle" title="Error" message="We couldn't verify that this is an authentic Keycard. Please contact your distributor." onPressFunc={cancel}></InfoScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </ImageBackground>
   );

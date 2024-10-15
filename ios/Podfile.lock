@@ -1246,7 +1246,7 @@ PODS:
     - Yoga
   - react-native-get-random-values (1.11.0):
     - React-Core
-  - react-native-status-keycard (2.6.1):
+  - react-native-status-keycard (2.6.2):
     - Keycard
     - React
   - React-nativeconfig (0.75.3)
@@ -1826,7 +1826,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 714f2fae68edcabfc332b754e9fbaa8cfc68fdd4
   React-microtasksnativemodule: 4943ad8f99be8ccf5a63329fa7d269816609df9e
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
-  react-native-status-keycard: 9803b8545df3bde6880a2419ffbf3df404b3201f
+  react-native-status-keycard: 76a5c826352ee1d70de854b3e8b12670946bc1c8
   React-nativeconfig: 4a9543185905fe41014c06776bf126083795aed9
   React-NativeModulesApple: 0506da59fc40d2e1e6e12a233db5e81c46face27
   React-perflogger: 3bbb82f18e9ac29a1a6931568e99d6305ef4403b

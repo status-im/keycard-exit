@@ -20,7 +20,7 @@
     "react-native": "0.75.3",
     "react-native-get-random-values": "^1.11.0",
     "react-native-modal": "^13.0.1",
-    "react-native-status-keycard": "git+https://github.com/status-im/react-native-status-keycard.git#refs/tags/v2.6.1",
+    "react-native-status-keycard": "git+https://github.com/status-im/react-native-status-keycard.git#refs/tags/v2.6.2",
     "react-native-svg": "^15.7.1",
     "react-native-vector-icons": "^10.1.0",
     "react-native-vision-camera": "^4.5.3",
