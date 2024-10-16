@@ -27,6 +27,7 @@ enum Step {
   LoginError,
   FactoryReset,
   NotAuthentic,
+  WrongCard
 }
 
 const Main = () => {
@@ -44,6 +45,7 @@ const Main = () => {
   const pinRef = useRef("");
   const mnemonicRef = useRef("");
   const walletKey = useRef("");
+  const keyUID = useRef("");
   const sessionRef = useRef("")
   const challengeRef = useRef("")
 
@@ -74,6 +76,20 @@ const Main = () => {
     }
 
     return null
+  }
+
+  const rememberCard = async (uid) => {
+    walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
+    keyUID.current = uid;
+    await AsyncStorage.setItem("wallet-key", walletKey.current);
+    await AsyncStorage.setItem("key-uid", keyUID.current);
+  }
+
+  const forgetCard = () => {
+    walletKey.current = "";
+    keyUID.current = ""
+    AsyncStorage.removeItem("wallet-key");
+    AsyncStorage.removeItem("key-uid");
   }
 
   const loginRequest = async () => {
@@ -130,22 +146,23 @@ const Main = () => {
           break;
         case Step.Loading:
           await Keycard.saveMnemonic(mnemonicRef.current, pinRef.current);
-          walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
-          await AsyncStorage.setItem("wallet-key", walletKey.current);
+          await rememberCard(appInfo["key-uid"]);
           setStep(Step.LoadSuccess)
           break;
         case Step.Authentication:
-          walletKey.current = await Keycard.exportKeyWithPath(pinRef.current, WALLET_DERIVATION_PATH);
-          await AsyncStorage.setItem("wallet-key", walletKey.current);
+          await rememberCard(appInfo["key-uid"]);
           setStep(Step.Home);
           break;
         case Step.Home:
-          loginReq = await loginRequest();
+          if (appInfo["key-uid"] != keyUID.current) {
+            setStep(Step.WrongCard);
+          } else {
+            loginReq = await loginRequest();
+          }
           break;
         case Step.FactoryReset:
           await Keycard.factoryReset();
-          walletKey.current = "";
-          AsyncStorage.removeItem("wallet-key");
+          forgetCard();
           setStep(Step.Discovery);
           break;
         default:
@@ -177,9 +194,7 @@ const Main = () => {
     
     await stopNFC();
 
-    if (loginReq) {
-      console.log(loginReq);
-      
+    if (loginReq) {      
       try {
         const resp = await fetch(LOGIN_ENDPOINT, {
           method: 'POST',
@@ -216,8 +231,11 @@ const Main = () => {
       const loadData = async () => {
         await Keycard.setPairings(await getPairings());
         await Keycard.setCertificationAuthorities(["029ab99ee1e7a71bdf45b3f9c58c99866ff1294d2c1e304e228a86e10c3343501c"]);
-        const tmp = await AsyncStorage.getItem("wallet-key");
+        
+        let tmp = await AsyncStorage.getItem("wallet-key");
         walletKey.current = tmp !== null ? tmp : "";
+        tmp = await AsyncStorage.getItem("key-uid");
+        keyUID.current = tmp !== null ? tmp : "";
 
         if (walletKey.current) {
           setStep(Step.Home);
@@ -282,8 +300,7 @@ const Main = () => {
   }
 
   const cancel = () => {
-    walletKey.current = "";
-    AsyncStorage.removeItem("wallet-key");
+    forgetCard();
     setStep(Step.Discovery);
   }
 
@@ -328,6 +345,7 @@ const Main = () => {
       {step == Step.LoginSuccess && <InfoScreen icon="check-circle" title="Success!" message="Login successful. You can now proceed to the Operator Dashboard in your browser" onPressFunc={toHome}></InfoScreen>}
       {step == Step.LoginError && <InfoScreen icon="close-circle" title="Error" message={errorMessage} onPressFunc={toHome}></InfoScreen>}
       {step == Step.NotAuthentic && <InfoScreen icon="close-circle" title="Error" message="We couldn't verify that this is an authentic Keycard. Please contact your distributor." onPressFunc={cancel}></InfoScreen>}
+      {step == Step.WrongCard && <InfoScreen icon="close-circle" title="Wrong card" message="You tapped a card different from the one logged in. Please either re-login with this card or tap the currently logged in card." onPressFunc={toHome}></InfoScreen>}
       <NFCModal isVisible={isModalVisible} onChangeFunc={stopNFC}></NFCModal>
     </ImageBackground>
   );
