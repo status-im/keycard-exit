@@ -13,6 +13,7 @@ import SubMenuModal from "../SubMenuModal";
 import IconButton from "../IconButton";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Svg, { Circle, Defs, Mask, Rect } from "react-native-svg";
+import OperatorList from "../OperatorList";
 
 enum HomeSteps {
   Home,
@@ -112,7 +113,7 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
 
   return <View style={Styles.container}>
     {step == HomeSteps.Home && 
-    <View>
+    <View style={Styles.container}>
       <View style={styles.homeTextContainer}>
         <Text style={styles.homeHeading}>My Operators</Text>
         <TouchableOpacity style={styles.subMenu} onPress={openSubMenu}><Icon name="dots-horizontal" size={24} color="white" /></TouchableOpacity>
@@ -125,7 +126,8 @@ const  HomeScreen: FC<HomeScreenProps> = props => {
         <View style={{width: '50%'}}>
           <IconButton label="Scan" disabled={false} rotate="0deg" backgroundColor="#321504" labelColor="#FE740C" icon="line-scan" onChangeFunc={() => setStep(HomeSteps.ScanCode)}/> 
         </View>
-        </View>
+      </View>
+      <OperatorList wallet={walletKey}></OperatorList>
       <ReceiveModal address={walletAddress()} isVisible={receiveVisible} onChangeFunc={copyAddressAndClose} onCancelFunc={() => setReceiveVisible(false)}/>
     </View>
     }
