@@ -1,5 +1,5 @@
 import {FC, useRef, useState } from "react";
-import { FlatList, KeyboardAvoidingView, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, KeyboardAvoidingView, Linking, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import * as bip39 from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import Button from "../Button";
@@ -150,7 +150,14 @@ const  MnemonicScreen: FC<MnemonicScreenProps> = props => {
           <View style={styles.mnemonicInputContainer}>
             <Text style={styles.mnemonicInputPlaceholder}>Seed phrase</Text>
             <TouchableOpacity style={styles.mnemonicVisibilityIcon} onPress={toggleVisibility}><Icon name={showMnemonic ? "eye-off-outline" : "eye-outline"} size={16} color="white" /></TouchableOpacity>
-            <TextInput autoCapitalize="none" autoComplete="off" autoCorrect={false} secureTextEntry={!showMnemonic} multiline={showMnemonic} editable onChangeText={updateMnemonic} value={mnemonic} style={styles.mnemonic}/>
+            {Platform.OS === 'ios' ?
+            <>
+            <TextInput autoCapitalize="none" autoComplete="off" autoCorrect={false} secureTextEntry={false} multiline={true} editable onChangeText={updateMnemonic} value={mnemonic} style={[styles.mnemonic, { display: showMnemonic ? 'flex' : 'none' }]} />
+            <TextInput autoCapitalize="none" autoComplete="off" autoCorrect={false} secureTextEntry={true} multiline={false} editable onChangeText={updateMnemonic} value={mnemonic} style={[styles.mnemonic, { display: showMnemonic ? 'none' : 'flex' }]} />
+            </>
+            :
+            <TextInput autoCapitalize="none" autoComplete="off" autoCorrect={false} secureTextEntry={!showMnemonic} multiline={showMnemonic} editable onChangeText={updateMnemonic} value={mnemonic} style={styles.mnemonic} />
+            }
           </View>
         </View>
         <KeyboardAvoidingView keyboardVerticalOffset={20} behavior="padding" style={Styles.footer}>
